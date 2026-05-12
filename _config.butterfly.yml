@@ -1,0 +1,172 @@
+nav:
+  display_title: true
+  display_post_title: true
+  fixed: true
+
+menu:
+  Home: / || fas fa-house
+  Articles||fas fa-book-open:
+    Archives: /archives/ || fas fa-box-archive
+    Categories: /categories/ || fas fa-folder-open
+    Tags: /tags/ || fas fa-tags
+  Explore||fas fa-compass:
+    Featured: / || fas fa-star
+    Latest: /archives/ || fas fa-clock
+  Social||fas fa-comments:
+    Message: /message/ || fas fa-message
+    About: /about/ || fas fa-id-card
+  Profile||fas fa-user:
+    About Me: /about/ || fas fa-user-circle
+    Contact: /message/ || fas fa-paper-plane
+
+favicon: /img/favicon.ico
+
+avatar:
+  img: /img/butterfly-icon.png
+  effect: false
+
+index_img: /img/hero-miku.png
+default_top_img: /img/hero-miku.png
+archive_img: /img/hero-miku.png
+tag_img: /img/hero-miku.png
+category_img: /img/hero-miku.png
+footer_img: false
+
+index_site_info_top: 50%
+index_top_img_height: 100vh
+
+subtitle:
+  enable: true
+  effect: false
+  sub:
+    - Starlight drifts across the quiet blue sky.
+
+index_layout: 3
+index_post_content:
+  method: 3
+  length: 180
+
+post_meta:
+  page:
+    date_type: created
+    date_format: date
+    categories: true
+    tags: false
+    label: true
+  post:
+    position: left
+    date_type: both
+    date_format: date
+    categories: true
+    tags: true
+    label: true
+
+aside:
+  enable: true
+  hide: false
+  button: true
+  mobile: true
+  position: right
+  display:
+    archive: true
+    tag: true
+    category: true
+  card_author:
+    enable: true
+    description: Notes on code, ideas, and everyday experiments.
+    button:
+      enable: true
+      icon: fas fa-paper-plane
+      text: Explore
+      link: /
+  card_announcement:
+    enable: true
+    content: Welcome to qianny's Blog. May each visit bring one small new discovery.
+  card_recent_post:
+    enable: true
+    limit: 5
+    sort: date
+  card_categories:
+    enable: true
+    limit: 8
+    expand: none
+  card_tags:
+    enable: true
+    limit: 30
+    color: false
+    orderby: random
+    order: 1
+  card_archives:
+    enable: true
+    type: monthly
+    format: MMMM YYYY
+    order: -1
+    limit: 6
+  card_webinfo:
+    enable: true
+    post_count: true
+    last_push_date: true
+
+social:
+  fas fa-house: / || Home || "#67d3dc"
+  fas fa-message: /message/ || Message || "#8ec5ff"
+
+theme_color:
+  enable: true
+  main: "#67d3dc"
+  paginator: "#8ec5ff"
+  button_hover: "#8edfff"
+  text_selection: "#14314a"
+  link_color: "#8ec5ff"
+  meta_color: "#9ba8c5"
+  hr_color: "#27455c"
+  code_foreground: "#8edfff"
+  code_background: "rgba(103, 211, 220, 0.08)"
+  toc_color: "#8ec5ff"
+  blockquote_padding_color: "#67d3dc"
+  blockquote_background_color: "rgba(103, 211, 220, 0.08)"
+  scrollbar_color: "#3d6f90"
+  meta_theme_color_light: "#091019"
+  meta_theme_color_dark: "#091019"
+
+rounded_corners_ui: true
+enter_transitions: true
+display_mode: dark
+readmode: false
+
+font:
+  global_font_size: 16px
+  code_font_size: 14px
+  font_family: "'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif"
+  code_font_family: "'JetBrains Mono', 'Cascadia Code', Consolas, monospace, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+
+blog_title_font:
+  font_family: "'Georgia', 'Times New Roman', 'PingFang SC', serif"
+
+beautify:
+  enable: false
+
+hr_icon:
+  enable: true
+
+note:
+  style: flat
+  icons: true
+  border_radius: 8
+
+preloader:
+  enable: true
+  source: 1
+
+pjax:
+  enable: false
+
+lazyload:
+  enable: false
+
+inject:
+  head:
+    - <link rel="stylesheet" href="/blog/css/custom.css">
+  bottom:
+    - <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+    - <script src="/blog/js/live2d-init.js"></script>

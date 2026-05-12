@@ -1,6 +1,52 @@
 mixin indexPostUI()
   - const indexLayout = theme.index_layout
   - const masonryLayoutClass = [6, 7].includes(indexLayout) ? 'masonry' : ''
+  if globalPageType === 'home' && page.posts.data.length
+    -
+      const featuredArticle = page.posts.data[0]
+      const featuredLink = featuredArticle.link || featuredArticle.path
+      const featuredTitle = featuredArticle.title || _p('no_title')
+      const featuredDesc = postDesc(featuredArticle)
+      const featuredCover = featuredArticle.cover
+      const featuredDate = date(featuredArticle.date, config.date_format)
+      const featuredCategories = site.categories.sort('length', -1).limit(3)
+      const featuredTags = site.tags.sort('length', -1).limit(3)
+    .home-showcase
+      .home-showcase__feature.card-widget
+        .home-showcase__feature-cover
+          a(href=url_for(featuredLink) title=featuredTitle)
+            if featuredCover && featuredArticle.cover_type === 'img'
+              img(src=url_for(featuredCover) onerror=`this.onerror=null;this.src='${url_for(theme.error_img.post_page)}'` alt=featuredTitle)
+            else if featuredCover
+              .home-showcase__feature-bg(style=`background: ${featuredCover}`)
+            else
+              .home-showcase__feature-bg.home-showcase__feature-bg--fallback
+        .home-showcase__feature-body
+          .home-showcase__eyebrow Featured Signal
+          time.home-showcase__date(datetime=date_xml(featuredArticle.date))= featuredDate
+          a.home-showcase__title(href=url_for(featuredLink) title=featuredTitle)= featuredTitle
+          if featuredDesc
+            .home-showcase__desc!= featuredDesc
+          .home-showcase__meta
+            if featuredArticle.categories && featuredArticle.categories.data.length
+              each item in featuredArticle.categories.data.slice(0, 2)
+                a.home-showcase__chip(href=url_for(item.path))= item.name
+            if featuredArticle.tags && featuredArticle.tags.data.length
+              each item in featuredArticle.tags.data.slice(0, 2)
+                a.home-showcase__chip.home-showcase__chip--ghost(href=url_for(item.path))= `# ${item.name}`
+      .home-showcase__groups.card-widget
+        .item-headline
+          i.fas.fa-table-cells-large
+          span Quick Navigation
+        .home-showcase__group-grid
+          each item in featuredCategories.data
+            a.home-showcase__group(href=url_for(item.path))
+              span.home-showcase__group-name= item.name
+              span.home-showcase__group-count= item.length
+          each item in featuredTags.data
+            a.home-showcase__group.home-showcase__group--tag(href=url_for(item.path))
+              span.home-showcase__group-name= `# ${item.name}`
+              span.home-showcase__group-count= item.length
   #recent-posts.recent-posts.nc(class=masonryLayoutClass)
     .recent-post-items
       each article, index in page.posts.data
@@ -19,98 +65,107 @@ mixin indexPostUI()
                 else
                   div.post-bg(style=`background: ${postCover}`)
           .recent-post-info(class=noCover)
-            a.article-title(href=url_for(link) title=title)
-              if globalPageType === 'home' && (article.top || article.sticky > 0)
-                i.fas.fa-thumbtack.sticky
-              = title
-            .article-meta-wrap
-              if theme.post_meta.page.date_type
-                span.post-meta-date
-                  if theme.post_meta.page.date_type === 'both'
-                    i.far.fa-calendar-alt
-                    span.article-meta-label=_p('post.created')
-                    time.post-meta-date-created(datetime=date_xml(article.date) title=_p('post.created') + ' ' + full_date(article.date))= date(article.date, config.date_format)
+            .recent-post-info__inner
+              a.article-title(href=url_for(link) title=title)
+                if globalPageType === 'home' && (article.top || article.sticky > 0)
+                  i.fas.fa-thumbtack.sticky
+                = title
+              .article-meta-wrap
+                if theme.post_meta.page.date_type
+                  span.post-meta-date
+                    if theme.post_meta.page.date_type === 'both'
+                      i.far.fa-calendar-alt
+                      span.article-meta-label=_p('post.created')
+                      time.post-meta-date-created(datetime=date_xml(article.date) title=_p('post.created') + ' ' + full_date(article.date))= date(article.date, config.date_format)
+                      span.article-meta-separator |
+                      i.fas.fa-history
+                      span.article-meta-label=_p('post.updated')
+                      time.post-meta-date-updated(datetime=date_xml(article.updated) title=_p('post.updated') + ' ' + full_date(article.updated))= date(article.updated, config.date_format)
+                    else
+                      - const isUpdatedType = theme.post_meta.page.date_type === 'updated'
+                      - const dateType = isUpdatedType ? 'updated' : 'date'
+                      - const dateIcon = isUpdatedType ? 'fas fa-history' : 'far fa-calendar-alt'
+                      - const dateTitle = isUpdatedType ? _p('post.updated') : _p('post.created')
+                      i(class=dateIcon)
+                      span.article-meta-label= dateTitle
+                      time(datetime=date_xml(article[dateType]) title=dateTitle + ' ' + full_date(article[dateType]))= date(article[dateType], config.date_format)
+                if theme.post_meta.page.categories && article.categories.data.length > 0
+                  span.article-meta
                     span.article-meta-separator |
-                    i.fas.fa-history
-                    span.article-meta-label=_p('post.updated')
-                    time.post-meta-date-updated(datetime=date_xml(article.updated) title=_p('post.updated') + ' ' + full_date(article.updated))= date(article.updated, config.date_format)
-                  else
-                    - const isUpdatedType = theme.post_meta.page.date_type === 'updated'
-                    - const dateType = isUpdatedType ? 'updated' : 'date'
-                    - const dateIcon = isUpdatedType ? 'fas fa-history' : 'far fa-calendar-alt'
-                    - const dateTitle = isUpdatedType ? _p('post.updated') : _p('post.created')
-                    i(class=dateIcon)
-                    span.article-meta-label= dateTitle
-                    time(datetime=date_xml(article[dateType]) title=dateTitle + ' ' + full_date(article[dateType]))= date(article[dateType], config.date_format)
-              if theme.post_meta.page.categories && article.categories.data.length > 0
-                span.article-meta
-                  span.article-meta-separator |
-                  each item, index in article.categories.data
-                    i.fas.fa-inbox
-                    a(href=url_for(item.path)).article-meta__categories #[=item.name]
-                    if index < article.categories.data.length - 1
-                      i.fas.fa-angle-right.article-meta-link
-              if theme.post_meta.page.tags && article.tags.length > 0
-                span.article-meta.tags
-                  span.article-meta-separator |
-                  each item, index in article.tags.data
-                    i.fas.fa-tag
-                    a(href=url_for(item.path)).article-meta__tags #[=item.name]
-                    if index < article.tags.data.length - 1
-                      span.article-meta-link #[='•']
+                    each item, index in article.categories.data
+                      i.fas.fa-inbox
+                      a(href=url_for(item.path)).article-meta__categories #[=item.name]
+                      if index < article.categories.data.length - 1
+                        i.fas.fa-angle-right.article-meta-link
+                if theme.post_meta.page.tags && article.tags.length > 0
+                  span.article-meta.tags
+                    span.article-meta-separator |
+                    each item, index in article.tags.data
+                      i.fas.fa-tag
+                      a(href=url_for(item.path)).article-meta__tags #[=item.name]
+                      if index < article.tags.data.length - 1
+                        span.article-meta-link /
 
-              mixin countBlockInIndex
-                - needLoadCountJs = true
-                span.article-meta
-                  span.article-meta-separator |
-                  i.fas.fa-comments
-                  if block
-                    block
-                  span.article-meta-label= ' ' + _p('card_post_count')
+                mixin countBlockInIndex
+                  - needLoadCountJs = true
+                  span.article-meta
+                    span.article-meta-separator |
+                    i.fas.fa-comments
+                    if block
+                      block
+                    span.article-meta-label= ' ' + _p('card_post_count')
 
-              if theme.comments.card_post_count && theme.comments.use
-                - const commentSystem = theme.comments.use[0]
-                - const commentLink = url_for(link) + '#post-comment'
+                if theme.comments.card_post_count && theme.comments.use
+                  - const commentSystem = theme.comments.use[0]
+                  - const commentLink = url_for(link) + '#post-comment'
 
-                case commentSystem
-                  when 'Disqus'
-                  when 'Disqusjs'
-                    +countBlockInIndex
-                      a.disqus-count(href=full_url_for(link) + '#post-comment')
-                        i.fa-solid.fa-spinner.fa-spin
-                  when 'Valine'
-                    +countBlockInIndex
-                      a(href=commentLink)
-                        span.valine-comment-count(data-xid=url_for(link))
+                  case commentSystem
+                    when 'Disqus'
+                    when 'Disqusjs'
+                      +countBlockInIndex
+                        a.disqus-count(href=full_url_for(link) + '#post-comment')
                           i.fa-solid.fa-spinner.fa-spin
-                  when 'Waline'
-                    +countBlockInIndex
-                      a(href=commentLink)
-                        span.waline-comment-count(data-path=url_for(link))
+                    when 'Valine'
+                      +countBlockInIndex
+                        a(href=commentLink)
+                          span.valine-comment-count(data-xid=url_for(link))
+                            i.fa-solid.fa-spinner.fa-spin
+                    when 'Waline'
+                      +countBlockInIndex
+                        a(href=commentLink)
+                          span.waline-comment-count(data-path=url_for(link))
+                            i.fa-solid.fa-spinner.fa-spin
+                    when 'Twikoo'
+                      +countBlockInIndex
+                        a.twikoo-count(href=commentLink)
                           i.fa-solid.fa-spinner.fa-spin
-                  when 'Twikoo'
-                    +countBlockInIndex
-                      a.twikoo-count(href=commentLink)
-                        i.fa-solid.fa-spinner.fa-spin
-                  when 'Facebook Comments'
-                    +countBlockInIndex
-                      a(href=commentLink)
-                        span.fb-comments-count(data-href=urlNoIndex(article.permalink))
-                  when 'Remark42'
-                    +countBlockInIndex
-                      a(href=commentLink)
-                        span.remark42__counter(data-url=urlNoIndex(article.permalink))
-                          i.fa-solid.fa-spinner.fa-spin
-                  when 'Artalk'
-                    +countBlockInIndex
-                      a(href=commentLink)
-                        span.artalk-count(data-page-key=url_for(link))
-                          i.fa-solid.fa-spinner.fa-spin
+                    when 'Facebook Comments'
+                      +countBlockInIndex
+                        a(href=commentLink)
+                          span.fb-comments-count(data-href=urlNoIndex(article.permalink))
+                    when 'Remark42'
+                      +countBlockInIndex
+                        a(href=commentLink)
+                          span.remark42__counter(data-url=urlNoIndex(article.permalink))
+                            i.fa-solid.fa-spinner.fa-spin
+                    when 'Artalk'
+                      +countBlockInIndex
+                        a(href=commentLink)
+                          span.artalk-count(data-page-key=url_for(link))
+                            i.fa-solid.fa-spinner.fa-spin
 
-            //- Display the article introduction on homepage
-            - const content = postDesc(article)
-            if content
-              .content!=content
+              - const content = postDesc(article)
+              if content
+                .content!=content
+
+              if article.categories.data.length > 0 || article.tags.data.length > 0
+                .recent-post-info__footer
+                  if article.categories.data.length > 0
+                    each item in article.categories.data.slice(0, 2)
+                      a.recent-post-info__badge(href=url_for(item.path))= item.name
+                  if article.tags.data.length > 0
+                    each item in article.tags.data.slice(0, 2)
+                      a.recent-post-info__badge.recent-post-info__badge--ghost(href=url_for(item.path))= `# ${item.name}`
 
         if theme.ad && theme.ad.index
           if (index + 1) % 3 === 0

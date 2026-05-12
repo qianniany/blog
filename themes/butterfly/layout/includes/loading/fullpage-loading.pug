@@ -1,26 +1,165 @@
-#loading-box
-  .loading-left-bg
-  .loading-right-bg
-  .spinner-box
-    .configure-border-1
-      .configure-core
-    .configure-border-2
-      .configure-core
-    .loading-word= _p('loading')
+style.
+  body.is-loading {
+    overflow: hidden !important;
+  }
+
+  body.is-loading #body-wrap {
+    opacity: 0 !important;
+  }
+
+  #loading-box {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    overflow: hidden;
+    background: #090b12;
+  }
+
+  #loading-box .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(180deg, rgba(6, 10, 18, .38), rgba(6, 10, 18, .62)), var(--loading-bg);
+    background-position: center;
+    background-size: cover;
+  }
+
+  #loading-box .loading-progress-shell {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    z-index: 1002;
+    width: 78px;
+    transform: translateX(-50%);
+  }
+
+  #loading-box .loading-progress-track {
+    overflow: hidden;
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .72);
+  }
+
+  #loading-box .loading-progress-bar {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #36bdfa, #8ee7ff);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  #loading-box .loading-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1002;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+
+  #loading-box .loading-title {
+    margin-bottom: 14px;
+    color: rgba(255, 255, 255, .96);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: .03em;
+  }
+
+  #loading-box .loading-status {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 14px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    background: rgba(12, 16, 28, .22);
+    color: rgba(255, 255, 255, .76);
+    font-size: .82rem;
+    letter-spacing: .08em;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+#loading-box(style=`--loading-bg:url('${url_for('/img/hero-miku.png')}')`)
+  .loading-overlay
+  .loading-progress-shell
+    .loading-progress-track
+      .loading-progress-bar#loading-progress-bar
+  .loading-center
+    .loading-title= config.title || _p('loading')
+    .loading-status
+      span.loading-status-text Loading
+      span.loading-status-percent#loading-progress-text 0%
 
 script.
   (()=>{
     const $loadingBox = document.getElementById('loading-box')
     const $body = document.body
+    const $html = document.documentElement
+    const $progressBar = document.getElementById('loading-progress-bar')
+    const $progressText = document.getElementById('loading-progress-text')
+    let current = 0
+    let target = 12
+    let rafId = null
+    let timerId = null
+    let finished = false
+
+    const finalizeReveal = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          $html.classList.add('page-reveal-done')
+        })
+      })
+    }
+
+    const renderProgress = value => {
+      const safeValue = Math.max(0, Math.min(100, value))
+      $progressBar.style.transform = `scaleX(${safeValue / 100})`
+      $progressText.textContent = `${Math.round(safeValue)}%`
+    }
+
+    const tick = () => {
+      current += (target - current) * 0.08
+      if (Math.abs(target - current) < 0.3) current = target
+      renderProgress(current)
+      if (current < 100) rafId = requestAnimationFrame(tick)
+    }
+
+    const startFakeProgress = () => {
+      timerId = setInterval(() => {
+        if (finished) return
+        target = Math.min(88, target + Math.random() * 9 + 2)
+      }, 240)
+      tick()
+    }
+
     const preloader = {
       endLoading: () => {
-        if ($loadingBox.classList.contains('loaded')) return
-        $body.style.overflow = ''
-        $loadingBox.classList.add('loaded')
+        if ($loadingBox.classList.contains('loaded') || finished) return
+        finished = true
+        clearInterval(timerId)
+        cancelAnimationFrame(rafId)
+        target = 100
+        renderProgress(100)
+        $body.classList.remove('is-loading')
+        $html.classList.add('page-reveal-ready')
+        finalizeReveal()
+        setTimeout(() => {
+          $loadingBox.classList.add('loaded')
+        }, 260)
       },
       initLoading: () => {
-        $body.style.overflow = 'hidden'
+        $body.classList.add('is-loading')
+        $html.classList.remove('page-reveal-ready')
+        $html.classList.remove('page-reveal-done')
         $loadingBox.classList.remove('loaded')
+        current = 0
+        target = 12
+        finished = false
+        renderProgress(0)
+        startFakeProgress()
       }
     }
 
@@ -30,9 +169,8 @@ script.
       preloader.endLoading()
     } else {
       window.addEventListener('load', preloader.endLoading)
-      document.addEventListener('DOMContentLoaded', preloader.endLoading)
-      // Add timeout protection: force end after 7 seconds
-      setTimeout(preloader.endLoading, 7000)
+      // Fallback protection if a third-party asset hangs forever.
+      setTimeout(preloader.endLoading, 12000)
     }
 
     if (!{theme.pjax && theme.pjax.enable}) {
