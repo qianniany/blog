@@ -33,9 +33,13 @@ header#page-header(class=`${headerClassName + isFixedClass}` style=bg_img)
       include ./post-info.pug
     else if globalPageType === 'home'
       .cy-skyfx(aria-hidden="true")
+        canvas.cy-skyfx__particle-canvas
         .cy-skyfx__stars
         .cy-skyfx__embers
         .cy-skyfx__meteors
+          span.cy-skyfx__meteor
+          span.cy-skyfx__meteor
+          span.cy-skyfx__meteor
           span.cy-skyfx__meteor
           span.cy-skyfx__meteor
           span.cy-skyfx__meteor
