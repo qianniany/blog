@@ -128,27 +128,12 @@ a:hover,
   pointer-events: none;
 }
 
-.cy-skyfx__particle-canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 1;
-  mix-blend-mode: screen;
-}
-
 .cy-skyfx__stars,
 .cy-skyfx__embers,
 .cy-skyfx__meteors {
   position: absolute;
   inset: -8%;
   pointer-events: none;
-}
-
-.cy-skyfx__meteors {
-  z-index: 2;
 }
 
 .cy-skyfx__stars::before,
@@ -1626,7 +1611,7 @@ html {
 .message-hero,
 .message-card,
 .message-note,
-#post-comment {
+.message-comment {
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(146, 191, 244, 0.18);
@@ -1642,7 +1627,7 @@ html {
 .message-hero::before,
 .message-card::before,
 .message-note::before,
-#post-comment::before {
+.message-comment::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -1744,16 +1729,26 @@ html {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-#post-comment {
+.message-comment {
   margin-top: 1.6rem;
   padding: 1.25rem 1.2rem;
 }
 
-#post-comment .comment-headline {
+.message-comment__headline {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   margin-bottom: 1rem;
+  color: #f4f8ff;
+  font-size: 1.12rem;
+  font-weight: 700;
 }
 
-#post-comment .comment-headline span {
+.message-comment__headline i {
+  color: #84e5ef;
+}
+
+.message-comment__headline span {
   color: #f4f8ff;
   font-size: 1.12rem;
 }
@@ -1775,7 +1770,7 @@ html {
   .message-hero,
   .message-card,
   .message-note,
-  #post-comment {
+  .message-comment {
     border-radius: 22px;
   }
 
@@ -1798,7 +1793,7 @@ html {
     border-radius: 18px;
   }
 
-  #post-comment {
+  .message-comment {
     padding: 1rem 0.92rem;
   }
 }

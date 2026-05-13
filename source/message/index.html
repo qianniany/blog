@@ -1,10 +1,8 @@
 ---
 title: 留言板
-date: 2026-05-13 00:10:00
 layout: page
 ---
 
-{% raw %}
 <div class="message-page">
   <section class="message-hero">
     <div class="message-hero__badge">
@@ -18,8 +16,8 @@ layout: page
     </p>
   </section>
 
-  <section class="message-grid">
-    <div class="message-card">
+  <div class="message-grid">
+    <section class="message-card">
       <h2><i class="fas fa-comment-dots"></i> 可以聊些什么</h2>
       <ul class="message-list">
         <li>对某篇文章的想法、补充和勘误</li>
@@ -27,9 +25,9 @@ layout: page
         <li>站点样式、功能体验或访问异常反馈</li>
         <li>随手留一句问候，记录一次相遇</li>
       </ul>
-    </div>
+    </section>
 
-    <div class="message-card">
+    <section class="message-card">
       <h2><i class="fas fa-circle-info"></i> 留言说明</h2>
       <ul class="message-list">
         <li>首次留言会跳转 GitHub 授权，这是 GitHub 留言系统的正常流程</li>
@@ -37,8 +35,8 @@ layout: page
         <li>如果组件加载较慢，通常是 GitHub 接口或网络原因，刷新即可</li>
         <li>建议使用常用 GitHub 账号，方便后续收到回复通知</li>
       </ul>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <section class="message-note">
     <div class="message-note__icon">
@@ -80,4 +78,3 @@ layout: page
     wrap.appendChild(script);
   })();
 </script>
-{% endraw %}

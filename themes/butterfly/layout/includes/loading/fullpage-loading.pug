@@ -190,10 +190,10 @@ script.
         cancelAnimationFrame(rafId)
         target = 100
         renderProgress(100)
-        $body.classList.remove('is-loading')
-        $body.classList.add('preload-ready')
         $loadingBox.classList.add('is-opening')
         setTimeout(() => {
+          $body.classList.remove('is-loading')
+          $body.classList.add('preload-ready')
           $loadingBox.classList.add('loaded')
         }, 760)
       },
