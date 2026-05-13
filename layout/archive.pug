@@ -17,7 +17,7 @@ block content
           .archive-card__media
             if cover
               if article.cover_type === 'img' || !article.cover_type
-                img.archive-card__image(src=url_for(cover) onerror=`this.onerror=null;this.src='${url_for(theme.error_img.post_page)}'` alt=title)
+                img.archive-card__image(src=url_for(cover) alt=title)
               else
                 .archive-card__image.archive-card__image--bg(style=`background: ${cover}`)
             .archive-card__overlay
@@ -29,21 +29,21 @@ block content
             .archive-card__meta
               span.archive-card__meta-item
                 i.far.fa-calendar-alt
-                span= `${_p('post.created')} ${date(article.date, config.date_format)}`
-              if article.updated && theme.post_meta.page.date_type === 'both'
+                span= ` 发布于 ${date(article.date, config.date_format)}`
+              if article.updated
                 span.archive-card__meta-divider |
                 span.archive-card__meta-item
                   i.fas.fa-history
-                  span= `${_p('post.updated')} ${date(article.updated, config.date_format)}`
+                  span= ` 更新于 ${date(article.updated, config.date_format)}`
 
-            if article.categories.data.length > 0 || article.tags.data.length > 0
+            if article.categories && article.categories.data.length > 0 || article.tags && article.tags.data.length > 0
               .archive-card__footer
-                if article.categories.data.length > 0
+                if article.categories && article.categories.data.length > 0
                   each item in article.categories.data.slice(0, 1)
                     span.archive-card__chip
                       i.fas.fa-folder-open
                       span= item.name
-                if article.tags.data.length > 0
+                if article.tags && article.tags.data.length > 0
                   each item in article.tags.data.slice(0, 2)
                     span.archive-card__chip.archive-card__chip--ghost
                       i.fas.fa-tag

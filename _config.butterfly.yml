@@ -4,20 +4,20 @@ nav:
   fixed: true
 
 menu:
-  Home: / || fas fa-house
-  Articles||fas fa-book-open:
-    Archives: /archives/ || fas fa-box-archive
-    Categories: /categories/ || fas fa-folder-open
-    Tags: /tags/ || fas fa-tags
-  Explore||fas fa-compass:
-    Featured: / || fas fa-star
-    Latest: /archives/ || fas fa-clock
-  Social||fas fa-comments:
-    Message: /message/ || fas fa-message
-    About: /about/ || fas fa-id-card
-  Profile||fas fa-user:
-    About Me: /about/ || fas fa-user-circle
-    Contact: /message/ || fas fa-paper-plane
+  首页: / || fas fa-house
+  文章||fas fa-book-open:
+    归档: /archives/ || fas fa-box-archive
+    分类: /categories/ || fas fa-folder-open
+    标签: /tags/ || fas fa-tags
+  探索||fas fa-compass:
+    推荐: / || fas fa-star
+    最新: /archives/ || fas fa-clock
+  互动||fas fa-comments:
+    留言: /message/ || fas fa-message
+    关于: /about/ || fas fa-id-card
+  个人||fas fa-user:
+    关于我: /about/ || fas fa-user-circle
+    联系我: /message/ || fas fa-paper-plane
 
 favicon: /img/favicon.ico
 
@@ -39,7 +39,7 @@ subtitle:
   enable: true
   effect: false
   sub:
-    - Starlight drifts across the quiet blue sky.
+    - 星光沿着夜色缓缓漂流。
 
 index_layout: 3
 index_post_content:
@@ -73,15 +73,15 @@ aside:
     category: true
   card_author:
     enable: true
-    description: Notes on code, ideas, and everyday experiments.
+    description: 记录代码、灵感与日常探索。
     button:
       enable: true
       icon: fas fa-paper-plane
-      text: Explore
+      text: 去看看
       link: /
   card_announcement:
     enable: true
-    content: Welcome to qianny's Blog. May each visit bring one small new discovery.
+    content: 欢迎来到 qianny 的博客，愿每次到访都有一点新的发现。
   card_recent_post:
     enable: true
     limit: 5
@@ -108,8 +108,8 @@ aside:
     last_push_date: true
 
 social:
-  fas fa-house: / || Home || "#67d3dc"
-  fas fa-message: /message/ || Message || "#8ec5ff"
+  fas fa-house: / || 首页 || "#67d3dc"
+  fas fa-message: /message/ || 留言 || "#8ec5ff"
 
 theme_color:
   enable: true
