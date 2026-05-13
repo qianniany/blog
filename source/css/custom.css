@@ -79,53 +79,79 @@ a:hover,
   z-index: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle, rgba(255, 244, 214, 0.92) 0 1px, transparent 1.8px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.76) 0 0.8px, transparent 1.5px),
-    radial-gradient(circle, rgba(196, 225, 255, 0.8) 0 0.9px, transparent 1.6px),
-    radial-gradient(circle, rgba(255, 238, 184, 0.74) 0 0.7px, transparent 1.3px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.54) 0 0.6px, transparent 1.1px),
     linear-gradient(122deg, transparent 0%, transparent 46%, rgba(255, 76, 98, 0.08) 49%, transparent 52%, transparent 100%),
     linear-gradient(302deg, transparent 0%, transparent 47%, rgba(145, 70, 255, 0.05) 49.5%, transparent 52%, transparent 100%),
     radial-gradient(circle at 22% 76%, rgba(163, 34, 46, 0.18) 0%, transparent 22%),
     radial-gradient(circle at 72% 18%, rgba(161, 30, 42, 0.14) 0%, transparent 18%);
   background-size:
-    160px 160px,
-    210px 210px,
-    280px 280px,
-    120px 120px,
-    92px 92px,
     100% 100%,
     100% 100%,
     100% 100%,
     100% 100%;
   background-position:
     0 0,
-    70px 110px,
-    130px 40px,
-    50px 80px,
-    20px 30px,
-    0 0,
     0 0,
     0 0,
     0 0;
   mix-blend-mode: screen;
-  opacity: 0.78;
+  opacity: 0.45;
   animation: cy-starfieldDrift 26s linear infinite;
 }
 
 #page-header.full_page #site-info,
-#page-header.full_page #nav,
-#page-header.full_page .cy-skyfx {
+#page-header.full_page #nav {
   position: relative;
-  z-index: 1;
+  z-index: 3;
+}
+
+.cy-skyfx {
+  display: none;
+}
+
+#universe,
+#snow {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#universe {
+  z-index: 2;
+}
+
+#snow {
+  z-index: 2;
+  display: none;
 }
 
 .cy-skyfx {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   overflow: hidden;
   pointer-events: none;
+}
+
+.cy-skyfx__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.cy-skyfx__canvas--universe {
+  z-index: 2;
+  opacity: 1;
+  mix-blend-mode: normal;
+  filter: none;
+}
+
+.cy-skyfx__canvas--snow {
+  z-index: 2;
+  opacity: 0.82;
 }
 
 .cy-skyfx__stars,
@@ -134,6 +160,24 @@ a:hover,
   position: absolute;
   inset: -8%;
   pointer-events: none;
+}
+
+.cy-skyfx__stars,
+.cy-skyfx__meteors {
+  display: none;
+}
+
+.cy-skyfx__stars {
+  z-index: 2;
+}
+
+.cy-skyfx__embers {
+  z-index: 1;
+  opacity: 0.45;
+}
+
+.cy-skyfx__meteors {
+  z-index: 4;
 }
 
 .cy-skyfx__stars::before,
@@ -735,6 +779,35 @@ a:hover,
 
 #card-info-btn:hover {
   background: linear-gradient(135deg, #5c7fbb, #97e1ff) !important;
+}
+
+#aside-content .card-info .card-info-social-icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+#aside-content .card-info .card-info-social-icons .social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: rgba(103, 211, 220, 0.1);
+  border: 1px solid rgba(142, 197, 255, 0.18);
+  color: #dfe8ff;
+  font-size: 1.08rem;
+  transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+}
+
+#aside-content .card-info .card-info-social-icons .social-icon:hover {
+  transform: translateY(-3px);
+  background: rgba(103, 211, 220, 0.18);
+  border-color: rgba(142, 197, 255, 0.34);
+  color: #ffffff;
 }
 
 #post,
@@ -1404,6 +1477,10 @@ html {
 @media (prefers-reduced-motion: reduce) {
   #live2d-widget {
     animation: none !important;
+  }
+
+  .cy-skyfx__canvas {
+    display: none !important;
   }
 }
 

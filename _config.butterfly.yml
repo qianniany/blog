@@ -11,7 +11,6 @@ menu:
     标签: /tags/ || fas fa-tags
   探索||fas fa-compass:
     推荐: / || fas fa-star
-    最新: /archives/ || fas fa-clock
   互动||fas fa-comments:
     留言: /message/ || fas fa-message
     关于: /about/ || fas fa-id-card
@@ -22,7 +21,7 @@ menu:
 favicon: /img/favicon.ico
 
 avatar:
-  img: /img/butterfly-icon.png
+  img: /img/avatar.jpg
   effect: false
 
 index_img: /img/hero-miku.png
@@ -118,6 +117,11 @@ aside:
 social:
   fas fa-house: / || 首页 || "#67d3dc"
   fas fa-message: /message/ || 留言 || "#8ec5ff"
+  fas fa-envelope: mailto:1365664464@qq.com || 邮箱 || "#a9ddff"
+  fab fa-qq: https://wpa.qq.com/msgrd?v=3&uin=1365664464&site=qq&menu=yes || QQ || "#8ec5ff"
+  fab fa-weixin: weixin:// || 微信 || "#7ad98f"
+  fab fa-github: https://github.com/qianniany || GitHub || "#dfe8ff"
+  fab fa-bilibili: https://space.bilibili.com/301729113?spm_id_from=333.1007.0.0 || Bilibili || "#ff8fc7"
 
 theme_color:
   enable: true
@@ -178,3 +182,4 @@ inject:
   bottom:
     - <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
     - <script src="/blog/js/live2d-init.js"></script>
+    - <script src="/blog/js/home-bg-effects.js"></script>
