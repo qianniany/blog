@@ -1,10 +1,22 @@
 style.
-  body.is-loading {
+  body:not(.preload-ready) {
     overflow: hidden !important;
   }
 
-  body.is-loading #body-wrap {
+  body:not(.preload-ready) #body-wrap,
+  body:not(.preload-ready) #sidebar,
+  body:not(.preload-ready) #rightside,
+  body:not(.preload-ready) #web_bg {
+    visibility: hidden !important;
     opacity: 0 !important;
+  }
+
+  body.preload-ready #body-wrap,
+  body.preload-ready #sidebar,
+  body.preload-ready #rightside,
+  body.preload-ready #web_bg {
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   #loading-box {
@@ -21,6 +33,30 @@ style.
     background-image: linear-gradient(180deg, rgba(6, 10, 18, .38), rgba(6, 10, 18, .62)), var(--loading-bg);
     background-position: center;
     background-size: cover;
+  }
+
+  #loading-box .loading-curtain {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50.2%;
+    background-image: linear-gradient(180deg, rgba(6, 10, 18, .14), rgba(6, 10, 18, .38)), var(--curtain-bg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: transform .86s cubic-bezier(.22, 1, .36, 1), opacity .42s ease, filter .5s ease;
+    will-change: transform, opacity;
+  }
+
+  #loading-box .loading-curtain-left {
+    left: 0;
+    --curtain-bg: url('/blog/img/loading-curtain-left.png');
+    background-position: center center;
+  }
+
+  #loading-box .loading-curtain-right {
+    right: 0;
+    --curtain-bg: url('/blog/img/loading-curtain-right.png');
+    background-position: center center;
   }
 
   #loading-box .loading-progress-shell {
@@ -82,8 +118,27 @@ style.
     -webkit-backdrop-filter: blur(10px);
   }
 
+  #loading-box.is-opening .loading-curtain-left {
+    transform: translateX(-102%);
+    opacity: .88;
+    filter: blur(2px);
+  }
+
+  #loading-box.is-opening .loading-curtain-right {
+    transform: translateX(102%);
+    opacity: .88;
+    filter: blur(2px);
+  }
+
+  #loading-box.is-opening .loading-overlay {
+    opacity: 0;
+    transition: opacity .38s ease;
+  }
+
 #loading-box(style=`--loading-bg:url('${url_for('/img/hero-miku.png')}')`)
   .loading-overlay
+  .loading-curtain.loading-curtain-left
+  .loading-curtain.loading-curtain-right
   .loading-progress-shell
     .loading-progress-track
       .loading-progress-bar#loading-progress-bar
@@ -105,14 +160,6 @@ script.
     let rafId = null
     let timerId = null
     let finished = false
-
-    const finalizeReveal = () => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          $html.classList.add('page-reveal-done')
-        })
-      })
-    }
 
     const renderProgress = value => {
       const safeValue = Math.max(0, Math.min(100, value))
@@ -144,16 +191,16 @@ script.
         target = 100
         renderProgress(100)
         $body.classList.remove('is-loading')
-        $html.classList.add('page-reveal-ready')
-        finalizeReveal()
+        $body.classList.add('preload-ready')
+        $loadingBox.classList.add('is-opening')
         setTimeout(() => {
           $loadingBox.classList.add('loaded')
-        }, 260)
+        }, 760)
       },
       initLoading: () => {
+        $body.classList.remove('preload-ready')
         $body.classList.add('is-loading')
-        $html.classList.remove('page-reveal-ready')
-        $html.classList.remove('page-reveal-done')
+        $loadingBox.classList.remove('is-opening')
         $loadingBox.classList.remove('loaded')
         current = 0
         target = 12
