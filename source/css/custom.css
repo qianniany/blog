@@ -23,6 +23,44 @@ body {
   color: var(--cy-text);
 }
 
+html[data-theme='light'] {
+  --cy-bg: #edf6ff;
+  --cy-bg-soft: rgba(245, 250, 255, 0.86);
+  --cy-card: rgba(255, 255, 255, 0.78);
+  --cy-card-strong: rgba(255, 255, 255, 0.9);
+  --cy-line: rgba(74, 121, 168, 0.22);
+  --cy-line-strong: rgba(48, 126, 186, 0.36);
+  --cy-shadow: 0 18px 45px rgba(49, 87, 122, 0.2);
+  --cy-shadow-hover: 0 24px 56px rgba(49, 87, 122, 0.28);
+  --cy-text: #24384d;
+  --cy-text-soft: #58708a;
+  --cy-title: #10283f;
+  --cy-accent: #2f8fc6;
+  --cy-accent-2: #4a79d8;
+  --global-bg: transparent;
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --font-color: #24384d;
+}
+
+html[data-theme='light'] #page-header.full_page {
+  background-image: url("../img/day-snow-anime.png") !important;
+  background-position: center center;
+  background-size: cover;
+}
+
+html[data-theme='light'] #page-header.full_page::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(20, 43, 75, 0.22) 54%, rgba(8, 20, 38, 0.52) 100%) !important;
+}
+
+html[data-theme='light'] #page-header.full_page::after {
+  opacity: 0.16;
+}
+
+html[data-theme='light'] body {
+  color: var(--cy-text);
+}
+
 ::selection {
   background: rgba(103, 211, 220, 0.28);
   color: #eff8ff;
@@ -1872,6 +1910,457 @@ html {
 
   .message-comment {
     padding: 1rem 0.92rem;
+  }
+}
+
+html[data-theme='light'],
+html[data-theme='light'] body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.86), transparent 26%),
+    radial-gradient(circle at 84% 12%, rgba(184, 222, 255, 0.36), transparent 28%),
+    linear-gradient(180deg, #eef7ff 0%, #f8fbff 44%, #edf6ff 100%);
+}
+
+html[data-theme='light'] a,
+html[data-theme='light'] #aside-content a,
+html[data-theme='light'] #recent-posts a,
+html[data-theme='light'] #post a,
+html[data-theme='light'] #page a {
+  color: #2f7eb8;
+}
+
+html[data-theme='light'] a:hover,
+html[data-theme='light'] #aside-content a:hover,
+html[data-theme='light'] #recent-posts a:hover,
+html[data-theme='light'] #post a:hover,
+html[data-theme='light'] #page a:hover {
+  color: #1c9aca;
+}
+
+html[data-theme='light'] #nav,
+html[data-theme='light'] #page-header.nav-fixed #nav,
+html[data-theme='light'] #page-header.not-top-img #nav,
+html[data-theme='light'] #page-header.fixed #nav,
+html[data-theme='light'] #page-header.nav-visible #nav,
+html[data-theme='light'] #page-header.nav-visible:not(.fixed) #nav {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(239, 248, 255, 0.76));
+  border-bottom: 1px solid rgba(80, 136, 178, 0.16);
+  box-shadow: 0 12px 30px rgba(65, 112, 150, 0.16);
+}
+
+html[data-theme='light'] #nav .site-page,
+html[data-theme='light'] #nav #site-name,
+html[data-theme='light'] #nav .site-name,
+html[data-theme='light'] #nav .menus_item_child li a,
+html[data-theme='light'] #nav #toggle-menu {
+  color: rgba(28, 54, 78, 0.92);
+  text-shadow: none;
+}
+
+html[data-theme='light'] #nav .site-page:hover,
+html[data-theme='light'] #nav #site-name:hover,
+html[data-theme='light'] #nav .site-name:hover,
+html[data-theme='light'] #nav .menus_item_child li a:hover,
+html[data-theme='light'] #nav #toggle-menu:hover {
+  color: #237fad;
+}
+
+html[data-theme='light'] #nav .menus_item_child {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(83, 140, 182, 0.18);
+  box-shadow: 0 18px 42px rgba(73, 118, 153, 0.16);
+}
+
+html[data-theme='light'] #nav .menus_item_child li:not(:last-child) {
+  border-bottom-color: rgba(83, 140, 182, 0.12);
+}
+
+html[data-theme='light'] #blog-info .site-name {
+  background: linear-gradient(135deg, #10283f 0%, #2f8fc6 48%, #6aa7e8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+}
+
+html[data-theme='light'] #nav::after {
+  background: linear-gradient(90deg, transparent, rgba(47, 143, 198, 0.34), transparent);
+}
+
+html[data-theme='light'] #page-header.full_page::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(214, 237, 255, 0.14) 48%, rgba(234, 246, 255, 0.58) 100%) !important;
+}
+
+html[data-theme='light'] #page-header.full_page::after {
+  opacity: 0.08;
+}
+
+html[data-theme='light'] .cy-skyfx {
+  opacity: 0.22;
+}
+
+html[data-theme='light'] #site-title,
+html[data-theme='light'] #site-subtitle,
+html[data-theme='light'] #site-subtitle #subtitle {
+  text-shadow: 0 3px 18px rgba(16, 40, 63, 0.28);
+}
+
+html[data-theme='light'] #recent-posts > .recent-post-item,
+html[data-theme='light'] #aside-content .card-widget,
+html[data-theme='light'] #post,
+html[data-theme='light'] #page,
+html[data-theme='light'] #archive,
+html[data-theme='light'] #tag,
+html[data-theme='light'] #category {
+  border-color: rgba(92, 148, 188, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(247, 252, 255, 0.78)),
+    radial-gradient(circle at top, rgba(128, 198, 238, 0.14), transparent 58%);
+  box-shadow: 0 18px 42px rgba(55, 103, 142, 0.14);
+}
+
+html[data-theme='light'] #recent-posts > .recent-post-item:hover,
+html[data-theme='light'] #aside-content .card-widget:hover,
+html[data-theme='light'] #post:hover,
+html[data-theme='light'] #page:hover,
+html[data-theme='light'] .post-card:hover,
+html[data-theme='light'] .archive-card:hover {
+  border-color: rgba(47, 143, 198, 0.36);
+  box-shadow: 0 24px 54px rgba(55, 103, 142, 0.2);
+}
+
+html[data-theme='light'] #recent-posts > .recent-post-item::before,
+html[data-theme='light'] #aside-content .card-widget::before,
+html[data-theme='light'] .post-card::before,
+html[data-theme='light'] .archive-card::before,
+html[data-theme='light'] .message-hero::before,
+html[data-theme='light'] .message-card::before,
+html[data-theme='light'] .message-note::before,
+html[data-theme='light'] .message-comment::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(99, 169, 216, 0.24), rgba(255, 255, 255, 0.38));
+}
+
+html[data-theme='light'] #recent-posts > .recent-post-item .article-title,
+html[data-theme='light'] #aside-content .card-info .author-info-name,
+html[data-theme='light'] #aside-content .item-headline,
+html[data-theme='light'] .archive-card-page .article-sort-title,
+html[data-theme='light'] .post-card__title,
+html[data-theme='light'] .archive-card__title,
+html[data-theme='light'] .message-hero h1,
+html[data-theme='light'] .message-card h2,
+html[data-theme='light'] .message-note h2,
+html[data-theme='light'] .message-comment__headline,
+html[data-theme='light'] .message-comment__headline span,
+html[data-theme='light'] .contact-card__value {
+  color: #10283f;
+}
+
+html[data-theme='light'] #recent-posts > .recent-post-item .article-title:hover {
+  color: #237fad;
+}
+
+html[data-theme='light'] #recent-posts > .recent-post-item .article-meta-wrap,
+html[data-theme='light'] #recent-posts > .recent-post-item .article-meta-wrap a,
+html[data-theme='light'] #recent-posts > .recent-post-item .article-meta-wrap .article-meta-label,
+html[data-theme='light'] #recent-posts > .recent-post-item .article-meta-wrap time,
+html[data-theme='light'] #recent-posts > .recent-post-item .content,
+html[data-theme='light'] #aside-content .card-info .author-info-description,
+html[data-theme='light'] .post-card__meta,
+html[data-theme='light'] .archive-card__meta,
+html[data-theme='light'] .message-hero p,
+html[data-theme='light'] .message-note p,
+html[data-theme='light'] .message-list li,
+html[data-theme='light'] .contact-panel__intro,
+html[data-theme='light'] .contact-card__label {
+  color: #58708a;
+}
+
+html[data-theme='light'] .recent-post-info__badge,
+html[data-theme='light'] .post-card__chip,
+html[data-theme='light'] .archive-card__chip,
+html[data-theme='light'] .message-hero__badge {
+  border-color: rgba(47, 143, 198, 0.18);
+  background: rgba(232, 247, 255, 0.82);
+  color: #2f6f9b;
+}
+
+html[data-theme='light'] .post-card__chip i,
+html[data-theme='light'] .archive-card__chip i,
+html[data-theme='light'] .post-card__meta-item i,
+html[data-theme='light'] .archive-card__meta-item i,
+html[data-theme='light'] #aside-content .item-headline i,
+html[data-theme='light'] .message-card h2 i,
+html[data-theme='light'] .message-note h2 i,
+html[data-theme='light'] .message-note__icon,
+html[data-theme='light'] .message-comment__headline i {
+  color: #2f8fc6;
+}
+
+html[data-theme='light'] .post-card__chip--ghost,
+html[data-theme='light'] .archive-card__chip--ghost {
+  border-color: rgba(74, 121, 216, 0.16);
+  background: rgba(235, 242, 255, 0.72);
+  color: #526f9f;
+}
+
+html[data-theme='light'] .post-card,
+html[data-theme='light'] .archive-card,
+html[data-theme='light'] .contact-card,
+html[data-theme='light'] .message-hero,
+html[data-theme='light'] .message-card,
+html[data-theme='light'] .message-note,
+html[data-theme='light'] .message-comment {
+  border-color: rgba(92, 148, 188, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 251, 255, 0.86) 100%),
+    radial-gradient(circle at 50% 0%, rgba(128, 198, 238, 0.14), transparent 54%);
+  box-shadow:
+    0 20px 46px rgba(55, 103, 142, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+html[data-theme='light'] .post-card__media,
+html[data-theme='light'] .archive-card__media {
+  background: linear-gradient(180deg, rgba(226, 242, 255, 0.78), rgba(247, 252, 255, 0.94));
+}
+
+html[data-theme='light'] .post-card__image,
+html[data-theme='light'] .archive-card__image {
+  filter: saturate(1.04) contrast(1.02) brightness(0.96);
+}
+
+html[data-theme='light'] .post-card__overlay,
+html[data-theme='light'] .archive-card__overlay {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(232, 246, 255, 0.18) 42%, rgba(246, 251, 255, 0.82) 100%),
+    radial-gradient(circle at 50% 2%, rgba(255, 255, 255, 0.28), transparent 34%);
+}
+
+html[data-theme='light'] .post-card__summary,
+html[data-theme='light'] .archive-card__summary {
+  color: rgba(16, 40, 63, 0.92);
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.62);
+}
+
+html[data-theme='light'] .post-card::after,
+html[data-theme='light'] .archive-card::after {
+  background: linear-gradient(180deg, rgba(47, 143, 198, 0), rgba(47, 143, 198, 0.72), rgba(47, 143, 198, 0));
+  box-shadow: 0 0 12px rgba(47, 143, 198, 0.2);
+}
+
+html[data-theme='light'] .post-card__body::before,
+html[data-theme='light'] .archive-card__body::before {
+  background: linear-gradient(90deg, rgba(47, 143, 198, 0), rgba(47, 143, 198, 0.54), rgba(47, 143, 198, 0));
+  box-shadow: 0 0 10px rgba(47, 143, 198, 0.12);
+}
+
+html[data-theme='light'] .post-card__pointer,
+html[data-theme='light'] .archive-card__pointer {
+  border-top-color: rgba(47, 143, 198, 0.76);
+  filter: drop-shadow(0 2px 6px rgba(47, 143, 198, 0.2));
+}
+
+html[data-theme='light'] #card-info-btn,
+html[data-theme='light'] .contact-card__action {
+  background: linear-gradient(135deg, #dff5ff, #8fd0f2) !important;
+  color: #10283f !important;
+  box-shadow: 0 12px 24px rgba(47, 143, 198, 0.18);
+}
+
+html[data-theme='light'] #card-info-btn:hover,
+html[data-theme='light'] .contact-card__action:hover {
+  background: linear-gradient(135deg, #ffffff, #aee4ff) !important;
+}
+
+html[data-theme='light'] #aside-content .card-info .card-info-social-icons .social-icon,
+html[data-theme='light'] #rightside > div > button,
+html[data-theme='light'] #rightside > div > a,
+html[data-theme='light'] #pagination .page-number,
+html[data-theme='light'] #pagination .extend {
+  color: #2f6f9b;
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(47, 143, 198, 0.18);
+  box-shadow: 0 12px 26px rgba(55, 103, 142, 0.14);
+}
+
+html[data-theme='light'] #aside-content .card-info .card-info-social-icons .social-icon:hover,
+html[data-theme='light'] #rightside > div > button:hover,
+html[data-theme='light'] #rightside > div > a:hover,
+html[data-theme='light'] #pagination .page-number:hover,
+html[data-theme='light'] #pagination .extend:hover {
+  color: #1c8fbd;
+  background: rgba(238, 249, 255, 0.94);
+  border-color: rgba(47, 143, 198, 0.32);
+}
+
+html[data-theme='light'] #pagination .page-number.current {
+  color: #10283f;
+  background: linear-gradient(135deg, #ffffff, #aee4ff);
+  box-shadow: 0 10px 22px rgba(47, 143, 198, 0.2);
+}
+
+html[data-theme='light'] #post .post-content,
+html[data-theme='light'] #page .post-content {
+  color: #24384d;
+}
+
+html[data-theme='light'] #post .post-content blockquote,
+html[data-theme='light'] #page .post-content blockquote,
+html[data-theme='light'] #post .post-content code,
+html[data-theme='light'] #page .post-content code,
+html[data-theme='light'] .contact-panel__intro,
+html[data-theme='light'] .message-note__icon {
+  background: rgba(232, 247, 255, 0.72);
+  border-color: rgba(47, 143, 198, 0.24);
+}
+
+html[data-theme='light'] #post .post-content code,
+html[data-theme='light'] #page .post-content code {
+  color: #237fad;
+}
+
+html[data-theme='light'] #footer-wrap {
+  color: #58708a;
+}
+
+html[data-theme='light'] ::-webkit-scrollbar-track {
+  background: rgba(236, 247, 255, 0.92);
+}
+
+html[data-theme='light'] ::-webkit-scrollbar-thumb {
+  border-color: rgba(236, 247, 255, 0.92);
+  background: linear-gradient(180deg, #b6e3fb, #5cb7df);
+}
+
+.Cuteen_DarkSky,
+.Cuteen_DarkSky::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 88888888;
+  pointer-events: none;
+}
+
+.Cuteen_DarkSky {
+  overflow: hidden;
+  opacity: 1;
+  background:
+    radial-gradient(circle at 50% 92%, rgba(255, 232, 160, 0.86), transparent 24%),
+    linear-gradient(to top, #f8cd71 0%, #5bfde9 80%);
+}
+
+.Cuteen_DarkSky::before {
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 82%, rgba(48, 207, 208, 0.32), transparent 26%),
+    linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  transition: opacity 1.8s cubic-bezier(0.7, 0, 0, 1);
+}
+
+.Cuteen_DarkSky.is-to-dark.is-active::before {
+  opacity: 1;
+}
+
+.Cuteen_DarkSky.is-to-light {
+  background:
+    radial-gradient(circle at 50% 92%, rgba(48, 207, 208, 0.3), transparent 24%),
+    linear-gradient(to top, #30cfd0 0%, #330867 100%);
+}
+
+.Cuteen_DarkSky.is-to-light::before {
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 92%, rgba(255, 232, 160, 0.86), transparent 24%),
+    linear-gradient(to top, #f8cd71 0%, #5bfde9 80%);
+}
+
+.Cuteen_DarkSky.is-to-light.is-active::before {
+  opacity: 1;
+}
+
+.Cuteen_DarkSky.is-fading {
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.Cuteen_DarkPlanet {
+  position: fixed;
+  left: -50%;
+  top: -50%;
+  z-index: 88888889;
+  width: 200%;
+  height: 200%;
+  transform-origin: center bottom;
+  animation: CuteenPlanetMove 2s cubic-bezier(0.7, 0, 0, 1);
+}
+
+.Cuteen_Sun,
+.Cuteen_Moon {
+  position: absolute;
+  left: 44%;
+  top: 30%;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 999px;
+  transition: opacity 0.8s ease;
+}
+
+.Cuteen_Sun {
+  background: #ffee94;
+  box-shadow: 0 0 40px #ffee94, 0 0 90px rgba(255, 238, 148, 0.42);
+}
+
+.Cuteen_Moon {
+  box-shadow: -1.8em 1.8em 0 0.2em #ffffff;
+}
+
+.Cuteen_DarkSky.is-to-dark .Cuteen_Sun {
+  opacity: 1;
+}
+
+.Cuteen_DarkSky.is-to-dark .Cuteen_Moon {
+  opacity: 0;
+}
+
+.Cuteen_DarkSky.is-to-dark.is-active .Cuteen_Sun {
+  opacity: 0;
+}
+
+.Cuteen_DarkSky.is-to-dark.is-active .Cuteen_Moon {
+  opacity: 1;
+}
+
+.Cuteen_DarkSky.is-to-light .Cuteen_Sun {
+  opacity: 0;
+}
+
+.Cuteen_DarkSky.is-to-light .Cuteen_Moon {
+  opacity: 1;
+}
+
+.Cuteen_DarkSky.is-to-light.is-active .Cuteen_Sun {
+  opacity: 1;
+}
+
+.Cuteen_DarkSky.is-to-light.is-active .Cuteen_Moon {
+  opacity: 0;
+}
+
+#darkmode i {
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+#darkmode:hover i {
+  transform: rotate(-18deg) scale(1.08);
+}
+
+@keyframes CuteenPlanetMove {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
 
