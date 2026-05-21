@@ -2660,3 +2660,7 @@ html[data-theme='light'] ::-webkit-scrollbar-thumb {
     transform: translate3d(-244px, 96px, 0) rotate(-19deg);
   }
 }
+
+.post-copyright__type {
+  display: none;
+}

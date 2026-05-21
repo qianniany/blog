@@ -176,6 +176,13 @@ pjax:
 lazyload:
   enable: false
 
+post_copyright:
+  enable: true
+  decode: false
+  author_href: https://github.com/qianniany
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
 inject:
   head:
     - <link rel="stylesheet" href="/blog/css/custom.css">
