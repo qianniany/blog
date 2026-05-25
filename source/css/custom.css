@@ -142,6 +142,21 @@ a:hover,
   z-index: 3;
 }
 
+#page-header.full_page #nav {
+  position: fixed !important;
+  z-index: 1000;
+  isolation: isolate;
+}
+
+#page-header.full_page #nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #070a10;
+  pointer-events: none;
+}
+
 .cy-skyfx {
   display: none;
 }
@@ -612,6 +627,27 @@ a:hover,
 
 #aside-content {
   width: 26%;
+}
+
+@media screen and (min-width: 901px) {
+  #aside-content .sticky_layout.toc-sticky-managed {
+    position: static;
+  }
+
+  #card-toc.toc-fixed-to-side {
+    position: fixed !important;
+    z-index: 90;
+    margin: 0;
+    max-height: calc(100vh - 100px);
+  }
+
+  #card-toc.toc-fixed-to-side .toc-content {
+    max-height: calc(100vh - 170px);
+  }
+
+  .toc-fixed-placeholder {
+    display: none;
+  }
 }
 
 #recent-posts.recent-posts.nc {

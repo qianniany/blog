@@ -191,3 +191,4 @@ inject:
     - <script src="/blog/js/live2d-init.js"></script>
     - <script src="/blog/js/home-bg-effects.js"></script>
     - <script src="/blog/js/theme-toggle-transition.js"></script>
+    - <script src="/blog/js/toc-sticky.js"></script>
