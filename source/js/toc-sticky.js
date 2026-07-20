@@ -87,7 +87,17 @@
     update();
   }
 
+  function resetTocSticky() {
+    clearFixed();
+    toc = null;
+    placeholder = null;
+    anchorTop = 0;
+    ticking = false;
+  }
+
   document.addEventListener('DOMContentLoaded', initTocSticky);
+  document.addEventListener('pjax:send', resetTocSticky);
+  document.addEventListener('pjax:complete', initTocSticky);
   window.addEventListener('load', measure);
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', function () {

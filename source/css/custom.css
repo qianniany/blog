@@ -483,15 +483,15 @@ html[data-theme='light'] #page-header.full_page #nav::before {
   top: 0 !important;
 }
 
-#page-header.nav-fixed #nav #blog-info > a:first-child,
-#page-header.fixed #nav #blog-info > a:first-child,
-#page-header.nav-visible #nav #blog-info > a:first-child {
-  display: inline !important;
+#page-header #nav #blog-info > a.nav-site-title {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
-#page-header.nav-fixed #nav #blog-info > a:last-child,
-#page-header.fixed #nav #blog-info > a:last-child,
-#page-header.nav-visible #nav #blog-info > a:last-child {
+#page-header.nav-fixed #nav #blog-info > a.nav-page-title,
+#page-header.fixed #nav #blog-info > a.nav-page-title,
+#page-header.nav-visible #nav #blog-info > a.nav-page-title {
   display: none !important;
 }
 

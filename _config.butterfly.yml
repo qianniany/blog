@@ -171,11 +171,11 @@ preloader:
   source: 1
 
 pjax:
-  enable: false
+  enable: true
 
 aplayerInject:
   enable: true
-  per_page: true
+  per_page: false
 
 fireworks:
   enable: false
@@ -201,4 +201,4 @@ inject:
     - <script src="/blog/js/toc-sticky.js"></script>
     - <script src="/blog/js/scroll-effects.js"></script>
     - <script src="/blog/js/fun-widgets.js"></script>
-    - <div class="aplayer" data-server="netease" data-type="playlist" data-id="3778678" data-fixed="true" data-mini="true" data-order="random" data-preload="none" data-listfolded="true" data-autoplay="false" data-theme="#67d3dc"></div>
+    - <div class="aplayer" data-server="netease" data-type="playlist" data-id="18170738222" data-fixed="true" data-mini="true" data-order="random" data-preload="none" data-listfolded="true" data-autoplay="false" data-theme="#67d3dc"></div>

@@ -414,6 +414,11 @@
     const target = candidates[Math.floor(Math.random() * candidates.length)];
     showToast("抽中了「" + target.title + "」");
     window.setTimeout(function () {
+      if (window.pjax && typeof window.pjax.loadUrl === "function") {
+        window.pjax.loadUrl(target.path);
+        return;
+      }
+
       window.location.href = target.path;
     }, 620);
   };

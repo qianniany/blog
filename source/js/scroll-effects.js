@@ -54,6 +54,11 @@
   };
 
   const setupReveal = function () {
+    if (state.observer) {
+      state.observer.disconnect();
+      state.observer = null;
+    }
+
     const targets = document.querySelectorAll(".recent-post-item, .card-widget:not(#card-toc)");
     if (!targets.length) return;
 
@@ -64,8 +69,6 @@
       }
       return;
     }
-
-    if (state.observer) state.observer.disconnect();
 
     state.observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
