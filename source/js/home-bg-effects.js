@@ -19,7 +19,11 @@
     pointerY: -100,
     running: false,
     universeFrameId: 0,
-    snowFrameId: 0
+    snowFrameId: 0,
+    heroElement: null,
+    heroObserver: null,
+    heroVisible: false,
+    documentVisible: !document.hidden
   };
 
   const config = {
@@ -54,6 +58,36 @@
 
   const currentTheme = function () {
     return document.documentElement.getAttribute("data-theme") || "dark";
+  };
+
+  const findHomeHero = function () {
+    return document.querySelector("#page-header.full_page");
+  };
+
+  const hideCanvases = function () {
+    if (state.universeCanvas) state.universeCanvas.style.display = "none";
+    if (state.snowCanvas) state.snowCanvas.style.display = "none";
+  };
+
+  const stopRendering = function () {
+    state.running = false;
+
+    if (state.universeFrameId) {
+      window.cancelAnimationFrame(state.universeFrameId);
+      state.universeFrameId = 0;
+    }
+
+    if (state.snowFrameId) {
+      window.cancelAnimationFrame(state.snowFrameId);
+      state.snowFrameId = 0;
+    }
+  };
+
+  const shouldRender = function () {
+    return !prefersReducedMotion()
+      && state.documentVisible
+      && state.heroVisible
+      && !!state.heroElement;
   };
 
   const ensureCanvas = function (id) {
@@ -241,7 +275,11 @@
   };
 
   const render = function () {
-    if (!state.running) return;
+    if (!state.running || !shouldRender()) {
+      stopRendering();
+      hideCanvases();
+      return;
+    }
 
     const darkMode = currentTheme() === "dark";
     state.universeCanvas.style.display = darkMode ? "block" : "none";
@@ -249,12 +287,56 @@
 
     if (darkMode) {
       drawUniverse();
+      state.snowFrameId = 0;
       state.universeFrameId = window.requestAnimationFrame(render);
       return;
     }
 
     drawSnow();
+    state.universeFrameId = 0;
     state.snowFrameId = window.requestAnimationFrame(render);
+  };
+
+  const syncRendering = function () {
+    if (!shouldRender()) {
+      stopRendering();
+      hideCanvases();
+      return;
+    }
+
+    if (!state.running && state.universeCanvas && state.snowCanvas) {
+      state.running = true;
+      render();
+    }
+  };
+
+  const observeHomeHero = function () {
+    if (state.heroObserver) {
+      state.heroObserver.disconnect();
+      state.heroObserver = null;
+    }
+
+    state.heroElement = findHomeHero();
+
+    if (!state.heroElement) {
+      state.heroVisible = false;
+      return;
+    }
+
+    const rect = state.heroElement.getBoundingClientRect();
+    state.heroVisible = rect.bottom > 0 && rect.top < window.innerHeight;
+
+    if (!("IntersectionObserver" in window)) return;
+
+    state.heroObserver = new IntersectionObserver(function (entries) {
+      for (let index = 0; index < entries.length; index += 1) {
+        if (entries[index].target !== state.heroElement) continue;
+        state.heroVisible = entries[index].isIntersecting;
+        syncRendering();
+      }
+    }, { threshold: 0 });
+
+    state.heroObserver.observe(state.heroElement);
   };
 
   const bindPointer = function () {
@@ -265,10 +347,12 @@
   };
 
   state.refresh = function () {
-    if (prefersReducedMotion()) {
-      if (state.universeCanvas) state.universeCanvas.style.display = "none";
-      if (state.snowCanvas) state.snowCanvas.style.display = "none";
-      state.running = false;
+    state.documentVisible = !document.hidden;
+    observeHomeHero();
+
+    if (prefersReducedMotion() || !state.heroElement) {
+      stopRendering();
+      hideCanvases();
       return;
     }
 
@@ -280,16 +364,24 @@
     resize();
     syncParticles();
     syncFlakes();
-
-    if (!state.running) {
-      state.running = true;
-      render();
-    }
+    syncRendering();
   };
 
   window.addEventListener("resize", function () {
     resize();
     syncParticles();
+
+    if (state.heroElement && !state.heroObserver) {
+      const rect = state.heroElement.getBoundingClientRect();
+      state.heroVisible = rect.bottom > 0 && rect.top < window.innerHeight;
+    }
+
+    syncRendering();
+  });
+
+  document.addEventListener("visibilitychange", function () {
+    state.documentVisible = !document.hidden;
+    syncRendering();
   });
 
   bindPointer();

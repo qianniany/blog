@@ -173,6 +173,15 @@ preloader:
 pjax:
   enable: false
 
+aplayerInject:
+  enable: true
+  per_page: true
+
+fireworks:
+  enable: false
+  zIndex: 9999
+  mobile: false
+
 lazyload:
   enable: true
 
@@ -190,3 +199,6 @@ inject:
     - <script src="/blog/js/home-bg-effects.js"></script>
     - <script src="/blog/js/theme-toggle-transition.js"></script>
     - <script src="/blog/js/toc-sticky.js"></script>
+    - <script src="/blog/js/scroll-effects.js"></script>
+    - <script src="/blog/js/fun-widgets.js"></script>
+    - <div class="aplayer" data-server="netease" data-type="playlist" data-id="3778678" data-fixed="true" data-mini="true" data-order="random" data-preload="none" data-listfolded="true" data-autoplay="false" data-theme="#67d3dc"></div>

@@ -1,3 +1,32 @@
-top: []
+top:
+  - class_name: cy-weather-widget
+    id_name: cy-weather-widget
+    name: 初音天气站
+    icon: fas fa-cloud-sun
+    html: |
+      <div class="cy-weather" data-weather-state="idle">
+        <div class="cy-weather__hero">
+          <img class="cy-weather__avatar" src="/blog/img/avatar.jpg" alt="初音未来天气播报">
+          <div class="cy-weather__headline">
+            <span class="cy-weather__eyebrow">MIKU WEATHER LINK</span>
+            <strong class="cy-weather__location" data-weather-location>等待定位</strong>
+          </div>
+          <span class="cy-weather__icon" data-weather-icon aria-hidden="true">♪</span>
+        </div>
+        <div class="cy-weather__reading">
+          <span class="cy-weather__temperature" data-weather-temperature>--°</span>
+          <span class="cy-weather__condition" data-weather-condition>点击按钮连接你身边的天气</span>
+        </div>
+        <div class="cy-weather__details">
+          <span><i class="fas fa-thermometer-half"></i><b data-weather-apparent>体感 --°</b></span>
+          <span><i class="fas fa-wind"></i><b data-weather-wind>风速 --</b></span>
+        </div>
+        <p class="cy-weather__speech" data-weather-speech>未来歌姬正在等待你的定位许可。</p>
+        <button class="cy-weather__action" type="button" data-weather-action>
+          <i class="fas fa-map-marker-alt"></i>
+          <span>开启定位</span>
+        </button>
+        <span class="cy-weather__status" data-weather-status aria-live="polite">不会自动读取位置</span>
+      </div>
 
 bottom: []

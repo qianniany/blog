@@ -1,14 +1,16 @@
 mixin indexPostUI()
   #recent-posts.recent-posts.nc.home-card-page
     .post-card-grid
-      each article in page.posts.data
+      each article, index in page.posts.data
         - const title = article.title || _p('no_title')
         - const link = article.link || article.path
         - const cover = article.cover || theme.default_top_img || theme.index_img
         - const descHtml = postDesc(article) || ''
         - const descText = strip_html(descHtml).replace(/\s+/g, ' ').trim()
         - const summary = descText ? descText.slice(0, 76) : title
+        - const stickerText = ['39', 'MIKU', '♪'][index % 3]
         a.post-card(href=url_for(link) title=title)
+          span.post-card__sticker(aria-hidden='true')= stickerText
           .post-card__media
             if cover
               if article.cover_type === 'img' || !article.cover_type
