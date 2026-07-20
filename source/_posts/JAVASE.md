@@ -1,6 +1,6 @@
 ---
 title: JAVASE
-cover: https://haowallpaper.com/link/common/file/previewFileImg/18773495710469504
+cover: /img/covers/JAVASE.jpg
 date: 2026-05-25
 ---
 

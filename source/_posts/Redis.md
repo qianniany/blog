@@ -1,6 +1,6 @@
 ---
 title: Redis
-cover: https://haowallpaper.com/link/common/file/previewFileImg/15975162246385024
+cover: /img/covers/Redis.jpg
 date: 2026-06-10
 ---
 
@@ -1833,7 +1833,7 @@ quorum的值一般设置为哨兵个数的二分之一加1。
 
      什么是复制进度？主从架构中，主节点会将写操作同步给从节点，在这个过程中，主节点会用 master_repl_offset 记录当前的最新写操作在 repl_backlog_buffer 中的位置（如下图中的「主服务器已经写入的数据」的位置），而从节点会用 slave_repl_offset 这个值记录当前的复制进度（如下图中的「从服务器要读的位置」的位置）。
 
-     ![1](/img/Redis/1.webp)
+     ![1](/img/Redis/5.webp)
 
    - id号小的从节点优先，每个从节点都有一个id编号
 

@@ -42,8 +42,13 @@ html[data-theme='light'] {
   --font-color: #24384d;
 }
 
+html[data-theme='light'] body {
+  background: url("../img/day-snow-anime.jpg") center center / cover no-repeat fixed;
+}
+
 html[data-theme='light'] #page-header.full_page {
-  background-image: url("../img/day-snow-anime.png") !important;
+  background-color: transparent;
+  background-image: url("../img/day-snow-anime.jpg") !important;
   background-position: center center;
   background-size: cover;
 }
@@ -1045,34 +1050,6 @@ html[data-theme='light'] #blog-info .site-name {
   border-color: rgba(103, 211, 220, 0.28);
 }
 
-#live2d-widget {
-  right: 18px !important;
-  bottom: 112px !important;
-  z-index: 998 !important;
-  filter: drop-shadow(0 18px 28px rgba(52, 67, 101, 0.18));
-}
-
-#live2d-widget canvas {
-  cursor: grab;
-}
-
-#live2d-widget canvas:active {
-  cursor: grabbing;
-}
-
-#live2d-widget .live2d-tool {
-  right: 8px !important;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
-  border-radius: 999px !important;
-  background: rgba(18, 23, 32, 0.88) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-#live2d-widget .live2d-tool span {
-  color: #9ddcff !important;
-}
-
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -1091,12 +1068,6 @@ html[data-theme='light'] #blog-info .site-name {
 html {
   scrollbar-color: #3d6f90 rgba(4, 8, 14, 0.82);
   scrollbar-width: thin;
-}
-
-@media screen and (max-width: 900px) {
-  #live2d-widget {
-    display: none !important;
-  }
 }
 
 .archive-card-page {
@@ -1599,10 +1570,6 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #live2d-widget {
-    animation: none !important;
-  }
-
   .cy-skyfx__canvas {
     display: none !important;
   }

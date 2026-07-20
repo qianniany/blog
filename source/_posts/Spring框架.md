@@ -1,6 +1,6 @@
 ---
 title: Spring框架
-cover: https://haowallpaper.com/link//common/file/previewFileImg/19138560477582208
+cover: /img/covers/Spring框架.jpg
 date: 2026-06-20
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: SpringBoot和MyBatis框架
 date: 2026-06-22
-cover: https://haowallpaper.com/link//common/file/previewFileImg/18142832680947072
+cover: /img/covers/SpringBoot框架.jpg
 ---
 
 # SpringBoot

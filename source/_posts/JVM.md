@@ -1,6 +1,6 @@
 ---
 title: JVM
-cover: https://haowallpaper.com/link/common/file/previewFileImg/15933235037130112
+cover: /img/covers/JVM.jpg
 date: 2026-06-17
 ---
 

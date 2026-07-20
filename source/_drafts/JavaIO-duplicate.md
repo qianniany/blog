@@ -1,6 +1,6 @@
 ---
 title: JavaIO
-cover: /img/covers/JavaIO.jpg
+cover: https://haowallpaper.com/link/common/file/previewFileImg/17095142642732416
 date: 2026-05-30
 ---
 

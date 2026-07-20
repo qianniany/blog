@@ -1,7 +1,7 @@
 ---
 title: MySQL
 date: 2026-05-20
-cover: https://haowallpaper.com/link/common/file/previewFileImg/18096266869591424
+cover: /img/covers/MySQL基础知识.jpg
 ---
 
 # MySQL基础知识

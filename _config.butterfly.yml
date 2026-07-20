@@ -24,11 +24,11 @@ avatar:
   img: /img/avatar.jpg
   effect: false
 
-index_img: /img/hero-miku.png
-default_top_img: /img/hero-miku.png
-archive_img: /img/hero-miku.png
-tag_img: /img/hero-miku.png
-category_img: /img/hero-miku.png
+index_img: /img/hero-miku.jpg
+default_top_img: /img/hero-miku.jpg
+archive_img: /img/hero-miku.jpg
+tag_img: /img/hero-miku.jpg
+category_img: /img/hero-miku.jpg
 footer_img: false
 
 index_site_info_top: 50%
@@ -174,7 +174,7 @@ pjax:
   enable: false
 
 lazyload:
-  enable: false
+  enable: true
 
 post_copyright:
   enable: true
@@ -187,8 +187,6 @@ inject:
   head:
     - <link rel="stylesheet" href="/blog/css/custom.css">
   bottom:
-    - <script src="https://unpkg.com/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
-    - <script src="/blog/js/live2d-init.js"></script>
     - <script src="/blog/js/home-bg-effects.js"></script>
     - <script src="/blog/js/theme-toggle-transition.js"></script>
     - <script src="/blog/js/toc-sticky.js"></script>

@@ -1,6 +1,6 @@
 ---
 title: JAVA集合
-cover: https://haowallpaper.com/link/common/file/previewFileImg/16602818562149760
+cover: /img/covers/JAVA集合.jpg
 date: 2026-05-28
 ---
 

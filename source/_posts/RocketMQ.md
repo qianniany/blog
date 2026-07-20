@@ -1,7 +1,7 @@
 ---
 title: RocketMQ
 date: 2026-05-17
-cover: https://haowallpaper.com/link//common/file/previewFileImg/18011878490819968
+cover: /img/covers/RocketMQ.jpg
 ---
 
 # 什么是消息队列？
