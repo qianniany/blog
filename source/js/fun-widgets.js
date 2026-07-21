@@ -7,7 +7,7 @@
   }
 
   const WEATHER_KEY = "cy_weather_v1";
-  const PALETTE_KEY = "cy_palette_v1";
+  const PALETTE_KEY = "cy_palette_v2";
   const WEATHER_TTL = 30 * 60 * 1000;
   const SHANGHAI = { latitude: 31.23, longitude: 121.47, label: "上海" };
   const PALETTES = ["miku", "sakura", "violet"];
@@ -278,11 +278,11 @@
 
   const currentPalette = function () {
     const stored = readValue(PALETTE_KEY);
-    return PALETTES.indexOf(stored) >= 0 ? stored : "miku";
+    return PALETTES.indexOf(stored) >= 0 ? stored : "sakura";
   };
 
   const applyPalette = function (palette, notify) {
-    const safePalette = PALETTES.indexOf(palette) >= 0 ? palette : "miku";
+    const safePalette = PALETTES.indexOf(palette) >= 0 ? palette : "sakura";
     document.documentElement.setAttribute("data-cy-palette", safePalette);
     writeValue(PALETTE_KEY, safePalette);
 
