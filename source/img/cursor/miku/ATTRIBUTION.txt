@@ -1,0 +1,7 @@
+Miku cursor artwork
+
+Author credit from the source package: Bilibili / MiHuashi: Moos柚眠
+Usage: authorized by the site owner for non-commercial publication.
+Notice from the source package: do not use commercially or create derivative artwork.
+
+Web conversion: original ANI frames were resized to 64x64 and encoded as PNG/WebP without visual redesign.

@@ -1,89 +1,375 @@
 ---
-title: JavaIO
-cover: /img/covers/JavaIO.jpg
-date: 2026-05-30
+title: Kafka
+cover: /img/covers/Kafka.jpg
+date: 2026-07-10
 ---
 
-# IO 流简介
+# Kafka是什么
 
-IO 即 `Input/Output`，输入和输出。数据输入到计算机内存的过程即输入，反之输出到外部存储（比如数据库，文件，远程主机）的过程即输出。数据传输过程类似于水流，因此称为 IO 流。IO 流在 Java 中分为输入流和输出流，而根据数据的处理方式又分为字节流和字符流。
+Kafka 是一个分布式流式处理平台。这到底是什么意思呢？
 
-Java IO 流的 40 多个类都是从如下 4 个抽象类基类中派生出来的。
+流平台具有三个关键功能：
 
-- `InputStream`/`Reader`: 所有的输入流的基类，前者是字节输入流，后者是字符输入流。
-- `OutputStream`/`Writer`: 所有输出流的基类，前者是字节输出流，后者是字符输出流。
+1. **消息队列**：发布和订阅消息流，这个功能类似于消息队列，这也是 Kafka 也被归类为消息队列的原因。
+2. **容错的持久方式存储记录消息流**：Kafka 会把消息持久化到磁盘，有效避免了消息丢失的风险。
+3. **流式处理平台：** 在消息发布的时候进行处理，Kafka 提供了一个完整的流式处理类库。
+
+Kafka 主要有两大应用场景：
+
+1. **消息队列**：建立实时流数据管道，以可靠地在系统或应用程序之间获取数据。
+2. **数据处理：** 构建实时的流数据处理程序来转换或处理数据流。
+
+# kafka的优势在哪里
+
+1. 极致的性能：基于scala和java语言开发，设计中用来大量的批处理和异步的思想，最高可以每秒处理千万级别的消息。
+2. 极高的生态系统兼容性：kafka与周边的生态系统的兼容性是最好的，尤其在大数据和流计算领域
+
+# Kafka 核心概念
+
+## 什么是 Producer、Consumer、Broker、Topic、Partition？
+
+![1](/img/Kafka/1.png)
+
+**producer（生产者）**:生产消息
+
+**consumer（消费者**）：消费消息的乙方
+
+**broker（代理）**：可以看作一个独立的Kafka实例。多个broker组成kafka cluster
+
+**topic（主题）**：producer将消息发送到主题，consumer通过订阅主题消费特定消息
+
+**partition（分区）**：可以看作topic的一部分，一个topic可以有多个partition，partition可以分布在多个broker上，也就说明topic可以横跨多个broker
+
+**分区可以理解为消息队列中的队列**
+
+# kafka多副本机制
+
+Kafka分区引入多副本（**replica**）机制，分区的多个副本之间有一个叫做leader 的东西，其它副本称为follower，我们的消息会发送到leader副本，然后follower副本从leder副本拉取消息进行同步。
+
+> 生产者和消费者只与 leader 副本交互。你可以理解为其他副本只是 leader 副本的拷贝，它们的存在只是为了保证消息存储的安全性。当 leader 副本发生故障时会从 follower 中选举出一个 leader,但是 follower 中如果有和 leader 同步程度达不到要求的参加不了 leader 的竞选。
+
+**Kafka 的多分区（Partition）以及多副本（Replica）机制有什么好处呢？**
+
+1. Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能提供比较好的并发能力（负载均衡）。
+2. Partition 可以指定对应的 Replica 数, 这也极大地提高了消息存储的安全性, 提高了容灾能力，不过也相应的增加了所需要的存储空间。
+
+# ZooKeeper 和 Kafka
+
+## ZooKeeper 在 Kafka 中的作用是什么？
+
+1. **Broker 注册**：在 ZooKeeper 上会有一个专门**用来进行 Broker 服务器列表记录**的节点。每个 Broker 在启动时，都会到 ZooKeeper 上进行注册，即到 `/brokers/ids` 下创建属于自己的节点。每个 Broker 就会将自己的 IP 地址和端口等信息记录到该节点中去
+2. **Topic 注册**：在 Kafka 中，同一个**Topic 的消息会被分成多个分区**并将其分布在多个 Broker 上，**这些分区信息及与 Broker 的对应关系**也都是由 ZooKeeper 在维护。比如我创建了一个名字为 my-topic 的主题并且它有两个分区，对应到 ZooKeeper 中会创建这些文件夹：`/brokers/topics/my-topic/Partitions/0`、`/brokers/topics/my-topic/Partitions/1`
+3. **负载均衡**：上面也说过了 Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能提供比较好的并发能力。 对于同一个 Topic 的不同 Partition，Kafka 会尽力将这些 Partition 分布到不同的 Broker 服务器上。当生产者产生消息后也会尽量投递到不同 Broker 的 Partition 里面。当 Consumer 消费的时候，ZooKeeper 可以根据当前的 Partition 数量以及 Consumer 数量来实现动态负载均衡。
+
+## 使用 Kafka 能否不引入 ZooKeeper？
+
+在 Kafka 2.8 之前，Kafka 最被大家诟病的就是其重度依赖于 ZooKeeper。Kafka 2.8 引入了基于 Raft 协议的 KRaft 模式，但当时还属于 Early Access；Kafka 3.3.x 开始，KRaft 面向新集群被标记为生产可用；Kafka 4.0 起，ZooKeeper 模式已经移除，Kafka 只支持 KRaft 模式。
+
+# Kafka 消费顺序、消息丢失和重复消费
+
+## Kafka 如何保证消息的消费顺序？
+
+我们在使用消息队列的过程中经常有业务场景需要严格保证消息的消费顺序，比如我们同时发了 2 个消息，这 2 个消息对应的操作分别对应的数据库操作是：
+
+1. 更改用户会员等级。
+2. 根据会员等级计算订单价格。
+
+假如这两条消息的消费顺序不一样造成的最终结果就会截然不同。
+
+**kafka只能保证partition的消息有序**
+
+**消息在被追加到 Partition(分区)的时候都会分配一个特定的偏移量（offset）。Kafka 通过偏移量（offset）来保证消息在分区内的顺序性。**
+
+所以，我们就有一种很简单的保证消息消费顺序的方法：**1 个 Topic 只对应一个 Partition**。这样当然可以解决问题，但是破坏了 Kafka 的设计初衷。
+
+Kafka 中发送 1 条消息的时候，可以指定 **topic, partition, key,data**（数据） 4 个参数。如果你发送消息的时候**指定了 Partition** 的话，所有消息都会被发送到指定的 Partition。并且，**同一个 key 的消息可以保证只发送到同一个 partition，这个我们可以采用表/对象的 id 来作为 key 。**
+
+**总结一下，对于如何保证 Kafka 中消息消费的顺序，有了下面两种方法：**
+
+1. **1 个 Topic 只对应一个 Partition。**
+2. **（推荐）发送消息的时候指定 key/Partition。**
+
+顺序消费还要注意两个边界：
+
+- **只能保证同一分区内有序**：多个分区之间天然并行，不保证全局顺序。
+- **失败重试可能打乱业务效果**：如果某条消息处理失败，而后续消息已经被处理，业务层仍然需要状态机或版本号兜底。
+
+所以，生产上通常是“同一业务 key 进同一分区 + 单分区内顺序消费 + 消费端幂等/状态机校验”一起使用。
+
+# Kafka 如何保证消息不丢失？
+
+## 生产者丢失消息的情况
+
+生产者(Producer) 调用`send`方法发送消息之后，消息可能因为网络问题并没有发送过去。
+
+所以，我们不能默认在调用`send`方法发送消息之后消息发送成功了。为了确定消息是发送成功，我们要判断消息发送的结果。但是要注意的是 Kafka 生产者(Producer) 使用 `send` 方法发送消息实际上是异步的操作，我们可以通过 `get()`方法获取调用结果，但是这样也让它变为了同步操作，示例代码如下：
+
+```java
+SendResult<String, Object> sendResult = kafkaTemplate.send(topic, o).get();
+if (sendResult.getRecordMetadata() != null) {
+  logger.info("生产者成功发送消息到" + sendResult.getProducerRecord().topic() + "-> " + sendRe
+              sult.getProducerRecord().value().toString());
+}
+```
+
+但是一般不推荐这么做！可以采用为其添加回调函数的形式，示例代码如下：
+
+```java
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic, o);
+        future.addCallback(result -> logger.info("生产者成功发送消息到topic:{} partition:{}的消息", result.getRecordMetadata().topic(), result.getRecordMetadata().partition()),
+                ex -> logger.error("生产者发送消失败，原因：{}", ex.getMessage()));
+```
+
+如果消息发送失败的话，我们检查失败的原因之后重新发送即可！
+
+另外，这里推荐为 Producer 的`retries`（重试次数）设置一个比较合理的值，一般是 3 ，但是为了保证消息不丢失的话一般会设置比较大一点。设置完成之后，当出现网络问题之后能够自动重试消息发送，避免消息丢失。另外，建议还要设置重试间隔，因为间隔太小的话重试的效果就不明显了，网络波动一次你 3 次一下子就重试完了。
+
+## 消费者丢失消息的情况
+
+当消费者拉取到了分区的某个消息之后，消费者会自动提交了 offset。自动提交的话会有一个问题，试想一下，当消费者刚拿到这个消息准备进行真正消费的时候，突然挂掉了，消息实际上并没有被消费，但是 offset 却被自动提交了。
+
+**解决办法也比较粗暴，我们手动关闭自动提交 offset，每次在真正消费完消息之后再自己手动提交 offset 。** 但是，细心的朋友一定会发现，这样会带来消息被重新消费的问题。比如你刚刚消费完消息之后，还没提交 offset，结果自己挂掉了，那么这个消息理论上就会被消费两次。
+
+## Kafka 弄丢了消息
+
+我们知道 Kafka 为分区（Partition）引入了多副本（Replica）机制。分区（Partition）中的多个副本之间会有一个叫做 leader 的家伙，其他副本称为 follower。我们发送的消息会被发送到 leader 副本，然后 follower 副本才能从 leader 副本中拉取消息进行同步。生产者和消费者只与 leader 副本交互。你可以理解为其他副本只是 leader 副本的拷贝，它们的存在只是为了保证消息存储的安全性。
+
+**试想一种情况：假如 leader 副本所在的 broker 突然挂掉，那么就要从 follower 副本重新选出一个 leader ，但是 leader 的数据还有一些没有被 follower 副本的同步的话，就会造成消息丢失。**
+
+**设置 acks = all**
+
+解决办法就是我们设置 **acks = all**。acks 是 Kafka 生产者(Producer) 很重要的一个参数。
+
+acks 的默认值即为 1，代表我们的消息被 leader 副本接收之后就算被成功发送。当我们配置 **acks = all** 表示只有所有 ISR 列表的副本全部收到消息时，生产者才会接收到来自服务器的响应. 这种模式是最高级别的，也是最安全的，可以确保不止一个 Broker 接收到了消息. 该模式的延迟会很高.
+
+**设置 replication.factor >= 3**
+
+为了保证 leader 副本能有 follower 副本能同步消息，我们一般会为 topic 设置 **replication.factor >= 3**。这样就可以保证每个 分区(partition) 至少有 3 个副本。虽然造成了数据冗余，但是带来了数据的安全性。
+
+**设置 min.insync.replicas > 1**
+
+一般情况下我们还需要设置 **min.insync.replicas> 1** ，这样配置代表消息至少要被写入到 2 个副本才算是被成功发送。**min.insync.replicas** 的默认值为 1 ，在实际生产中应尽量避免默认值 1。
+
+**设置 unclean.leader.election.enable = false**
+
+我们最开始也说了我们发送的消息会被发送到 leader 副本，然后 follower 副本才能从 leader 副本中拉取消息进行同步。多个 follower 副本之间的消息同步情况不一样，当我们配置了 **unclean.leader.election.enable = false** 的话，当 leader 副本发生故障时就不会从 follower 副本中和 leader 同步程度达不到要求的副本中选择出 leader ，这样降低了消息丢失的可能性。
+
+## Kafka 如何保证消息不重复消费？
+
+- 服务端侧已经消费的数据没有成功提交 offset（根本原因）。
+
+- Kafka 侧 由于服务端处理业务时间长或者网络链接等等原因让 Kafka 认为服务假死，触发了分区 rebalance。
+
+**解决方案：**
+
+- 消费消息服务做幂等校验，比如 Redis 的 set、MySQL 的主键等天然的幂等功能。这种方法最有效。
+
+- 将`enable.auto.commit`参数设置为 false，关闭自动提交，开发者在代码中手动提交 offset。那么这里会有个问题：
+
+  什么时候提交 offset 合适？
+
+  - 处理完消息再提交：依旧有消息重复消费的风险，和自动提交一样
+  - 拉取到消息即提交：会有消息丢失的风险。允许消息延时的场景，一般会采用这种方式。然后，通过定时任务在业务不繁忙（比如凌晨）的时候做数据兜底。
+
+# Rebalance 有什么风险？如何减少影响？
+
+Consumer Group 中消费者数量变化、订阅 Topic 变化、消费者长时间没有发送心跳，都可能触发 Rebalance。Rebalance 期间，分区会被重新分配，部分消费者会暂停消费，严重时会造成消费抖动和重复消费。
+
+常见优化思路：
+
+- 控制消费者实例的频繁上下线，发布时尽量滚动、分批。
+- 合理设置 `max.poll.interval.ms`，避免单批消息处理太久导致消费者被踢出组。
+- 控制单次拉取数量，避免一次拉太多导致处理时间超过心跳或 poll 间隔。
+- 使用静态成员或更平滑的分区分配策略，减少不必要的分区迁移。
+- 消费端必须幂等，因为 Rebalance 前后 offset 提交和业务处理之间仍然可能出现重复。
+
+面试里如果被问到 Rebalance，不要只说“消费者重新分配分区”。更关键的是讲清楚它会带来短暂停顿、重复消费风险，以及如何通过参数、发布策略和幂等设计降低影响。
+
+# Kafka 重试机制
+
+## 消费失败会怎么样？
+
+在默认配置下，当消费异常会进行重试，重试多次后会跳过当前消息，继续进行后续消息的消费，不会一直卡在当前消息。下面是一段消费的日志，可以看出当 `test-0@95` 重试多次后会被跳过。
 
 
 
-# 什么是IO
+```java
+2023-08-10 12:03:32.918 DEBUG 9700 --- [ntainer#0-0-C-1] o.s.kafka.listener.DefaultErrorHandler   : Skipping seek of: test-0@95
+2023-08-10 12:03:32.918 TRACE 9700 --- [ntainer#0-0-C-1] o.s.kafka.listener.DefaultErrorHandler   : Seeking: test-0 to: 96
+2023-08-10 12:03:32.918  INFO 9700 --- [ntainer#0-0-C-1] o.a.k.clients.consumer.KafkaConsumer     : [Consumer clientId=consumer-apple-1, groupId=apple] Seeking to offset 96 for partition test-0
+```
 
-![1](/img/JavaIO/1.jpg)
+因此，即使某个消息消费异常，Kafka 消费者仍然能够继续消费后续的消息，不会一直卡在当前消息，保证了业务的正常进行。
 
-根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。
+## 默认会重试多少次？
 
-输入设备（比如键盘）和输出设备（比如显示器）都属于外部设备。网卡、硬盘这种既可以属于输入设备，也可以属于输出设备。
+默认配置下，消费异常会进行重试，重试次数是多少, 重试是否有时间间隔？
 
-输入设备向计算机输入数据，输出设备接收计算机输出的数据。
+看源码 `FailedRecordTracker` 类有个 `recovered` 函数，返回 Boolean 值判断是否要进行重试，下面是这个函数中判断是否重试的逻辑：
 
-**从计算机结构的视角来看的话， I/O 描述了计算机系统与外部设备之间通信的过程。**
 
-**我们再先从应用程序的角度来解读一下 I/O。**
 
-根据大学里学到的操作系统相关的知识：为了保证操作系统的稳定性和安全性，一个进程的地址空间划分为 **用户空间（User space）** 和 **内核空间（Kernel space ）** 。
+```java
+	@Override
+	public boolean recovered(ConsumerRecord<?, ?> record, Exception exception,
+	    @Nullable MessageListenerContainer container,
+	    @Nullable Consumer<?, ?> consumer) throws InterruptedException {
 
-像我们平常运行的应用程序都是运行在用户空间，只有内核空间才能进行系统态级别的资源有关的操作，比如文件管理、进程通信、内存管理等等。也就是说，我们想要进行 IO 操作，一定是要依赖内核空间的能力。
+	    if (this.noRetries) {
+         // 不支持重试
+	        attemptRecovery(record, exception, null, consumer);
+	        return true;
+	    }
+     // 取已经失败的消费记录集合
+	    Map < TopicPartition, FailedRecord > map = this.failures.get();
+	    if (map == null) {
+	        this.failures.set(new HashMap < > ());
+	        map = this.failures.get();
+	    }
+     //  获取消费记录所在的Topic和Partition
+	    TopicPartition topicPartition = new TopicPartition(record.topic(), record.partition());
+	    FailedRecord failedRecord = getFailedRecordInstance(record, exception, map, topicPartition);
+     // 通知注册的重试监听器，消息投递失败
+	    this.retryListeners.forEach(rl - >
+	        rl.failedDelivery(record, exception, failedRecord.getDeliveryAttempts().get()));
+	    // 获取下一次重试的时间间隔
+    long nextBackOff = failedRecord.getBackOffExecution().nextBackOff();
+	    if (nextBackOff != BackOffExecution.STOP) {
+	        this.backOffHandler.onNextBackOff(container, exception, nextBackOff);
+	        return false;
+	    } else {
+	        attemptRecovery(record, exception, topicPartition, consumer);
+	        map.remove(topicPartition);
+	        if (map.isEmpty()) {
+	            this.failures.remove();
+	        }
+	        return true;
+	    }
+	}
+```
 
-并且，用户空间的程序不能直接访问内核空间。
+其中， `BackOffExecution.STOP` 的值为 -1。
 
-当想要执行 IO 操作时，由于没有执行这些操作的权限，只能发起系统调用请求操作系统帮忙完成。
 
-因此，用户进程想要执行 IO 操作的话，必须通过 **系统调用** 来间接访问内核空间
 
-我们在平常开发过程中接触最多的就是 **磁盘 IO（读写文件）** 和 **网络 IO（网络请求和响应）**。
+```java
+@FunctionalInterface
+public interface BackOffExecution {
 
-**从应用程序的视角来看的话，我们的应用程序对操作系统的内核发起 IO 调用（系统调用），操作系统负责的内核执行具体的 IO 操作。也就是说，我们的应用程序实际上只是发起了 IO 操作的调用而已，具体 IO 的执行是由操作系统的内核来完成的。**
+	long STOP = -1;
+	long nextBackOff();
 
-当应用程序发起 I/O 调用后，会经历两个步骤：
+}
+```
 
-1. 内核等待 I/O 设备准备好数据
-2. 内核将数据从内核空间拷贝到用户空间。
+`nextBackOff` 的值调用 `BackOff` 类的 `nextBackOff()` 函数。如果当前执行次数大于最大执行次数则返回 `STOP`，既超过这个最大执行次数后才会停止重试。
 
-# Java 中 3 种常见 IO 模型
 
-## BIO (Blocking I/O)
 
-**BIO 属于同步阻塞 IO 模型** 。
+```java
+public long nextBackOff() {
+  this.currentAttempts++;
+  if (this.currentAttempts <= getMaxAttempts()) {
+    return getInterval();
+  }
+  else {
+    return STOP;
+  }
+}
+```
 
-同步阻塞 IO 模型中，应用程序发起 read 调用后，会一直阻塞，直到内核把数据拷贝到用户空间。
+那么这个 `getMaxAttempts` 的值又是多少呢？回到最开始，当执行出错会进入 `DefaultErrorHandler` 。`DefaultErrorHandler` 默认的构造函数是：
 
-在客户端连接数量不高的情况下，是没问题的。但是，当面对十万甚至百万级连接的时候，传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I/O 处理模型来应对更高的并发量。
 
-## NIO (Non-blocking/New I/O)
 
-Java 中的 NIO 于 Java 1.4 中引入，对应 `java.nio` 包，提供了 `Channel` , `Selector`，`Buffer` 等抽象。NIO 中的 N 可以理解为 Non-blocking，不单纯是 New。它是支持面向缓冲的，基于通道的 I/O 操作方法。 对于高负载、高并发的（网络）应用，应使用 NIO 。
+```java
+public DefaultErrorHandler() {
+  this(null, SeekUtils.DEFAULT_BACK_OFF);
+}
+```
 
-Java 中的 NIO 可以看作是 **I/O 多路复用模型**。也有很多人认为，Java 中的 NIO 属于同步非阻塞 IO 模型。
+`SeekUtils.DEFAULT_BACK_OFF` 定义的是:
 
-![1](/img/JavaIO/2.png)
 
-同步非阻塞 IO 模型中，应用程序会一直发起 read 调用，等待数据从内核空间拷贝到用户空间的这段时间里，线程依然是阻塞的，直到在内核把数据拷贝到用户空间。
 
-但是，这种 IO 模型同样存在问题：**应用程序不断进行 I/O 系统调用轮询数据是否已经准备好的过程是十分消耗 CPU 资源的。**
+```java
+public static final int DEFAULT_MAX_FAILURES = 10;
 
-![1](/img/JavaIO/3.png)
+public static final FixedBackOff DEFAULT_BACK_OFF = new FixedBackOff(0, DEFAULT_MAX_FAILURES - 1);
+```
 
-**I/O 多路复用模型**
+`DEFAULT_MAX_FAILURES` 的值是 10，`currentAttempts` 从 0 到 9，所以总共会执行 10 次，每次重试的时间间隔为 0。
 
-IO 多路复用模型中，线程首先发起 select 调用，询问内核数据是否准备就绪，等内核把数据准备好了，用户线程再发起 read 调用。read 调用的过程（数据从内核空间 -> 用户空间）还是阻塞的。
+最后，简单总结一下：Kafka 消费者在默认配置下会进行最多 10 次 的重试，每次重试的时间间隔为 0，即立即进行重试。如果在 10 次重试后仍然无法成功消费消息，则不再进行重试，消息将被视为消费失败。
 
-**IO 多路复用模型，通过减少无效的系统调用，减少了对 CPU 资源的消耗。**
+## 如何自定义重试次数以及时间间隔?
 
-Java 中的 NIO ，有一个非常重要的**选择器 ( Selector )** 的概念，也可以被称为 **多路复用器**。通过它，只需要一个线程便可以管理多个客户端连接。当客户端数据到了之后，才会为其服务。
+从上面的代码可以知道，默认错误处理器的重试次数以及时间间隔是由 `FixedBackOff` 控制的，`FixedBackOff` 是 `DefaultErrorHandler` 初始化时默认的。所以自定义重试次数以及时间间隔，只需要在 `DefaultErrorHandler` 初始化的时候传入自定义的 `FixedBackOff` 即可。重新实现一个 `KafkaListenerContainerFactory` ，调用 `setCommonErrorHandler` 设置新的自定义的错误处理器就可以实现。
 
-## AIO (Asynchronous I/O)
 
-AIO 也就是 NIO 2。Java 7 中引入了 NIO 的改进版 NIO 2,它是异步 IO 模型。
 
-异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。
+```java
+@Bean
+public KafkaListenerContainerFactory kafkaListenerContainerFactory(ConsumerFactory<String, String> consumerFactory) {
+    ConcurrentKafkaListenerContainerFactory factory = new ConcurrentKafkaListenerContainerFactory();
+    // 自定义重试时间间隔以及次数
+    FixedBackOff fixedBackOff = new FixedBackOff(1000, 5);
+    factory.setCommonErrorHandler(new DefaultErrorHandler(fixedBackOff));
+    factory.setConsumerFactory(consumerFactory);
+    return factory;
+}
+```
 
-目前来说 AIO 的应用还不是很广泛。Netty 之前也尝试使用过 AIO，不过又放弃了。这是因为，Netty 使用了 AIO 之后，在 Linux 系统上的性能并没有多少提升。
+## 如何在重试失败后进行告警?
+
+自定义重试失败后逻辑，需要手动实现，以下是一个简单的例子，重写 `DefaultErrorHandler` 的 `handleRemaining` 函数，加上自定义的告警等操作。
+
+
+
+```java
+@Slf4j
+public class DelErrorHandler extends DefaultErrorHandler {
+
+    public DelErrorHandler(FixedBackOff backOff) {
+        super(null,backOff);
+    }
+
+    @Override
+    public void handleRemaining(Exception thrownException, List<ConsumerRecord<?, ?>> records, Consumer<?, ?> consumer, MessageListenerContainer container) {
+        super.handleRemaining(thrownException, records, consumer, container);
+        log.info("重试多次失败");
+        // 自定义操作
+    }
+}
+```
+
+`DefaultErrorHandler` 只是默认的一个错误处理器，Spring Kafka 还提供了 `CommonErrorHandler` 接口。手动实现 `CommonErrorHandler` 就可以实现更多的自定义操作，有很高的灵活性。例如根据不同的错误类型，实现不同的重试逻辑以及业务逻辑等。
+
+## 重试失败后的数据如何再次处理?
+
+当达到最大重试次数后，数据会直接被跳过，继续向后进行。当代码修复后，如何重新消费这些重试失败的数据呢？
+
+**死信队列（Dead Letter Queue，简称 DLQ）** 是消息中间件中的一种特殊队列。它主要用于处理无法被消费者正确处理的消息，通常是因为消息格式错误、处理失败、消费超时等情况导致的消息被“丢弃”或“死亡”的情况。当消息进入队列后，消费者会尝试处理它。如果处理失败，或者超过一定的重试次数仍无法被成功处理，消息可以发送到死信队列中，而不是被永久性地丢弃。在死信队列中，可以进一步分析、处理这些无法正常消费的消息，以便定位问题、修复错误，并采取适当的措施。
+
+`@RetryableTopic` 是 Spring Kafka 中的一个注解,它用于配置某个 Topic 支持消息重试，更推荐使用这个注解来完成重试。
+
+
+
+```java
+// 重试 5 次，重试间隔 100 毫秒,最大间隔 1 秒
+@RetryableTopic(
+        attempts = "5",
+        backoff = @Backoff(delay = 100, maxDelay = 1000)
+)
+@KafkaListener(topics = {KafkaConst.TEST_TOPIC}, groupId = "apple")
+private void customer(String message) {
+    log.info("kafka customer:{}", message);
+    Integer n = Integer.parseInt(message);
+    if (n % 5 == 0) {
+        throw new RuntimeException();
+    }
+    System.out.println(n);
+}
+```
+
+当达到最大重试次数后，如果仍然无法成功处理消息，消息会被发送到对应的死信队列中。对于死信队列的处理，既可以用 `@DltHandler` 处理，也可以使用 `@KafkaListener` 重新消费。

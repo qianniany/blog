@@ -5,7 +5,7 @@
   const ignoredSelector = [
     "a", "button", "input", "textarea", "select", "option", "label", "summary",
     "[role='button']", "[contenteditable='true']", "#nav", "#sidebar", "#aside-content",
-    ".post-card", ".recent-post-item", "#post", "#page", ".card-widget", ".aplayer",
+    ".post-card", ".recent-post-item", "#post", "#page", ".card-widget", ".aplayer", "#cy-context-menu",
     "#rightside", "img", "video", "audio", "canvas", "svg"
   ].join(",");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

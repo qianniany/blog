@@ -203,4 +203,6 @@ inject:
     - <script src="/blog/js/infinite-posts.js"></script>
     - <script src="/blog/js/click-effects.js"></script>
     - <script src="/blog/js/fun-widgets.js"></script>
+    - <script src="/blog/js/miku-cursor.js"></script>
+    - <script src="/blog/js/context-menu.js"></script>
     - <div class="aplayer no-destroy" data-server="netease" data-type="playlist" data-id="18170738222" data-fixed="true" data-mini="true" data-order="random" data-preload="none" data-listfolded="true" data-autoplay="false" data-theme="#67d3dc"></div>

@@ -3380,33 +3380,216 @@ html[data-theme='light'] .cy-weather__speech {
   }
 }
 
-/* ===== Miku-inspired custom cursor ===== */
-@media (pointer: fine) {
-  html,
-  body,
-  #body-wrap,
-  #content-inner,
-  #recent-posts,
-  #aside-content {
-    cursor: url("../img/cursor/miku-leek.svg") 2 2, auto;
+/* ===== Miku animated cursor ===== */
+#cy-miku-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483647;
+  display: none;
+  width: 64px;
+  height: 64px;
+  opacity: 1;
+  pointer-events: none;
+  transform: translate3d(-80px, -80px, 0);
+  transition: opacity 0.1s ease;
+  will-change: transform;
+}
+
+#cy-miku-cursor img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+#cy-miku-cursor.is-hidden {
+  opacity: 0;
+}
+
+#cy-miku-cursor.is-pressed img {
+  transform: scale(0.92);
+}
+
+@media (any-pointer: fine) {
+  body.cy-miku-cursor-enabled,
+  body.cy-miku-cursor-enabled * {
+    cursor: none !important;
   }
 
-  a,
-  button,
-  select,
-  summary,
-  label,
-  [role='button'],
-  .post-card,
-  .aplayer,
-  #rightside > div {
-    cursor: url("../img/cursor/miku-note.svg") 2 2, pointer;
+  body.cy-miku-cursor-enabled #cy-miku-cursor {
+    display: block;
   }
 
-  input,
-  textarea,
-  [contenteditable='true'] {
-    cursor: text;
+  body.cy-miku-cursor-enabled textarea,
+  body.cy-miku-cursor-enabled [contenteditable='true'],
+  body.cy-miku-cursor-enabled input:not([type='button']):not([type='submit']):not([type='reset']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+  body.cy-miku-cursor-enabled [data-cy-cursor='text'] {
+    cursor: url("../img/cursor/miku/text.png") 7 14, text !important;
+  }
+
+  body.cy-miku-cursor-enabled [disabled],
+  body.cy-miku-cursor-enabled [aria-disabled='true'],
+  body.cy-miku-cursor-enabled [data-cy-cursor='unavailable'] {
+    cursor: url("../img/cursor/miku/unavailable.png") 0 0, not-allowed !important;
+  }
+
+  body.cy-miku-cursor-enabled [aria-busy='true'],
+  body.cy-miku-cursor-enabled .cy-cursor-busy,
+  body.cy-miku-cursor-enabled [data-cy-cursor='work'] {
+    cursor: url("../img/cursor/miku/work.png") 3 4, progress !important;
+  }
+
+  body.cy-miku-cursor-enabled [draggable='true'],
+  body.cy-miku-cursor-enabled [data-cy-cursor='move'] {
+    cursor: url("../img/cursor/miku/move.png") 30 32, move !important;
+  }
+
+  body.cy-miku-cursor-enabled [data-cy-cursor='help'] {
+    cursor: url("../img/cursor/miku/help.png") 0 0, help !important;
+  }
+
+  body.cy-miku-cursor-enabled [data-cy-cursor='precision'] {
+    cursor: url("../img/cursor/miku/precision.png") 13 13, crosshair !important;
+  }
+
+  body.cy-miku-cursor-enabled [data-cy-cursor='horizontal-resize'] {
+    cursor: url("../img/cursor/miku/horizontal-resize.png") 32 32, ew-resize !important;
+  }
+
+  body.cy-miku-cursor-enabled [data-cy-cursor='vertical-resize'] {
+    cursor: url("../img/cursor/miku/vertical-resize.png") 30 31, ns-resize !important;
+  }
+
+  body.cy-miku-cursor-enabled [data-cy-cursor='diagonal-resize-1'] {
+    cursor: url("../img/cursor/miku/diagonal-resize-1.png") 31 32, nwse-resize !important;
+  }
+
+  body.cy-miku-cursor-enabled [data-cy-cursor='diagonal-resize-2'] {
+    cursor: url("../img/cursor/miku/diagonal-resize-2.png") 32 31, nesw-resize !important;
+  }
+
+  body.cy-miku-cursor-enabled #cy-context-menu,
+  body.cy-miku-cursor-enabled #cy-context-menu * {
+    cursor: none !important;
+  }
+}
+
+/* ===== Custom context menu ===== */
+#cy-context-menu {
+  position: fixed;
+  z-index: 2147483646;
+  width: min(220px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  padding: 6px;
+  border: 1px solid rgba(var(--cy-accent-rgb), 0.34);
+  border-radius: 8px;
+  background: var(--cy-card-strong);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38), 0 0 24px var(--cy-accent-soft);
+  color: var(--cy-text);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform-origin: top left;
+}
+
+#cy-context-menu[hidden] {
+  display: none !important;
+}
+
+#cy-context-menu.is-open {
+  animation: cy-context-menu-in 0.16s ease-out both;
+}
+
+.cy-context-menu__item {
+  display: grid;
+  width: 100%;
+  min-height: 38px;
+  padding: 0 0.62rem;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cy-text);
+  font-size: 0.78rem;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cy-context-menu__item i {
+  color: var(--cy-accent);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.cy-context-menu__item:hover,
+.cy-context-menu__item:focus-visible {
+  outline: none;
+  background: rgba(var(--cy-accent-rgb), 0.16);
+  color: var(--cy-title);
+}
+
+.cy-context-menu__item:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(var(--cy-accent-rgb), 0.42);
+}
+
+.cy-context-menu__item:disabled {
+  opacity: 0.38;
+}
+
+.cy-context-menu__separator {
+  height: 1px;
+  margin: 5px 8px;
+  background: rgba(var(--cy-accent-rgb), 0.16);
+}
+
+#cy-context-feedback {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  z-index: 2147483647;
+  padding: 0.48rem 0.78rem;
+  border: 1px solid rgba(var(--cy-accent-rgb), 0.36);
+  border-radius: 6px;
+  background: var(--cy-card-strong);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
+  color: var(--cy-title);
+  font-size: 0.75rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+#cy-context-feedback.is-show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+#cy-context-feedback.is-error {
+  border-color: rgba(255, 110, 135, 0.52);
+  color: #ff9eac;
+}
+
+@keyframes cy-context-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  #cy-context-menu,
+  #cy-context-feedback {
+    display: none !important;
   }
 }
 
