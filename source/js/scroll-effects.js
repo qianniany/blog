@@ -59,7 +59,7 @@
       state.observer = null;
     }
 
-    const targets = document.querySelectorAll(".recent-post-item, .card-widget:not(#card-toc)");
+    const targets = document.querySelectorAll(".recent-post-item, .post-card, .card-widget:not(#card-toc)");
     if (!targets.length) return;
 
     if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
