@@ -1,7 +1,78 @@
 mixin indexPostUI()
   #recent-posts.recent-posts.nc.home-card-page
+    -
+      const isHomePage = globalPageType === 'home'
+      const isFirstHomePage = isHomePage && (!page.current || page.current === 1)
+      const allPosts = site.posts
+        ? (typeof site.posts.toArray === 'function' ? site.posts.toArray() : (site.posts.data || site.posts))
+        : []
+      const pinPriority = article => {
+        const sticky = Number(article.sticky)
+        if (Number.isFinite(sticky) && sticky > 0) return sticky
+        return article.top === true ? 1 : 0
+      }
+      const pinnedPosts = isFirstHomePage
+        ? allPosts.filter(article => pinPriority(article) > 0).sort((left, right) => {
+            const priorityDifference = pinPriority(right) - pinPriority(left)
+            if (priorityDifference !== 0) return priorityDifference
+            return new Date(right.date).getTime() - new Date(left.date).getTime()
+          })
+        : []
+      const regularPosts = isHomePage
+        ? page.posts.data.filter(article => pinPriority(article) === 0)
+        : page.posts.data
+
+    if pinnedPosts.length > 0
+      section.cy-pinned-posts(aria-labelledby='cy-pinned-posts-title')
+        .cy-pinned-posts__header
+          .cy-pinned-posts__heading
+            span.cy-pinned-posts__icon(aria-hidden='true')
+              i.fas.fa-thumbtack
+            span
+              span.cy-pinned-posts__eyebrow PINNED POSTS
+              h2#cy-pinned-posts-title 置顶文章
+
+          .cy-pinned-posts__controls(data-pinned-controls)
+            button.cy-pinned-posts__control(type='button' data-pinned-prev aria-label='查看上一篇置顶文章' title='上一篇')
+              i.fas.fa-chevron-left(aria-hidden='true')
+            button.cy-pinned-posts__control(type='button' data-pinned-next aria-label='查看下一篇置顶文章' title='下一篇')
+              i.fas.fa-chevron-right(aria-hidden='true')
+
+        .cy-pinned-posts__viewport(data-pinned-viewport tabindex='0' aria-label='置顶文章列表')
+          .cy-pinned-posts__track(role='list')
+            each pinnedArticle in pinnedPosts
+              - const pinnedTitle = pinnedArticle.title || _p('no_title')
+              - const pinnedLink = pinnedArticle.link || pinnedArticle.path
+              - const pinnedCover = pinnedArticle.cover || theme.default_top_img || theme.index_img
+              - const pinnedDescHtml = postDesc(pinnedArticle) || ''
+              - const pinnedDescText = strip_html(pinnedDescHtml).replace(/\s+/g, ' ').trim()
+              - const pinnedSummary = pinnedDescText ? pinnedDescText.slice(0, 90) : pinnedTitle
+              - const pinnedCategory = pinnedArticle.categories && pinnedArticle.categories.data && pinnedArticle.categories.data.length > 0 ? pinnedArticle.categories.data[0] : null
+              article.cy-pinned-card(role='listitem')
+                a.cy-pinned-card__link(href=url_for(pinnedLink) title=pinnedTitle)
+                  if pinnedCover
+                    if pinnedArticle.cover_type === 'img' || !pinnedArticle.cover_type
+                      img.cy-pinned-card__image(src=url_for(pinnedCover) onerror=`this.onerror=null;this.src='${url_for(theme.error_img.post_page)}'` loading='lazy' decoding='async' alt='')
+                    else
+                      .cy-pinned-card__image.cy-pinned-card__image--bg(style=`background: ${pinnedCover}` aria-hidden='true')
+                  .cy-pinned-card__overlay
+                  .cy-pinned-card__content
+                    span.cy-pinned-card__badge
+                      i.fas.fa-thumbtack(aria-hidden='true')
+                      span 置顶
+                    h3.cy-pinned-card__title= pinnedTitle
+                    p.cy-pinned-card__summary= pinnedSummary
+                    .cy-pinned-card__meta
+                      span
+                        i.far.fa-calendar-alt(aria-hidden='true')
+                        span= date(pinnedArticle.date, config.date_format)
+                      if pinnedCategory
+                        span
+                          i.fas.fa-folder-open(aria-hidden='true')
+                          span= pinnedCategory.name
+
     .post-card-grid
-      each article, index in page.posts.data
+      each article, index in regularPosts
         - const title = article.title || _p('no_title')
         - const link = article.link || article.path
         - const cover = article.cover || theme.default_top_img || theme.index_img

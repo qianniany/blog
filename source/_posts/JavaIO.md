@@ -13,8 +13,6 @@ Java IO 流的 40 多个类都是从如下 4 个抽象类基类中派生出来�
 - `InputStream`/`Reader`: 所有的输入流的基类，前者是字节输入流，后者是字符输入流。
 - `OutputStream`/`Writer`: 所有输出流的基类，前者是字节输出流，后者是字符输出流。
 
-
-
 # 什么是IO
 
 ![1](/img/JavaIO/1.jpg)

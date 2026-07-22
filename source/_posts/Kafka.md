@@ -1,4 +1,5 @@
 ---
+sticky: 100
 title: Kafka
 cover: /img/covers/Kafka.jpg
 date: 2026-07-10
@@ -167,7 +168,6 @@ acks 的默认值即为 1，代表我们的消息被 leader 副本接收之后�
 - 将`enable.auto.commit`参数设置为 false，关闭自动提交，开发者在代码中手动提交 offset。那么这里会有个问题：
 
   什么时候提交 offset 合适？
-
   - 处理完消息再提交：依旧有消息重复消费的风险，和自动提交一样
   - 拉取到消息即提交：会有消息丢失的风险。允许消息延时的场景，一般会采用这种方式。然后，通过定时任务在业务不繁忙（比如凌晨）的时候做数据兜底。
 
@@ -191,8 +191,6 @@ Consumer Group 中消费者数量变化、订阅 Topic 变化、消费者长时�
 
 在默认配置下，当消费异常会进行重试，重试多次后会跳过当前消息，继续进行后续消息的消费，不会一直卡在当前消息。下面是一段消费的日志，可以看出当 `test-0@95` 重试多次后会被跳过。
 
-
-
 ```java
 2023-08-10 12:03:32.918 DEBUG 9700 --- [ntainer#0-0-C-1] o.s.kafka.listener.DefaultErrorHandler   : Skipping seek of: test-0@95
 2023-08-10 12:03:32.918 TRACE 9700 --- [ntainer#0-0-C-1] o.s.kafka.listener.DefaultErrorHandler   : Seeking: test-0 to: 96
@@ -206,8 +204,6 @@ Consumer Group 中消费者数量变化、订阅 Topic 变化、消费者长时�
 默认配置下，消费异常会进行重试，重试次数是多少, 重试是否有时间间隔？
 
 看源码 `FailedRecordTracker` 类有个 `recovered` 函数，返回 Boolean 值判断是否要进行重试，下面是这个函数中判断是否重试的逻辑：
-
-
 
 ```java
 	@Override
@@ -250,8 +246,6 @@ Consumer Group 中消费者数量变化、订阅 Topic 变化、消费者长时�
 
 其中， `BackOffExecution.STOP` 的值为 -1。
 
-
-
 ```java
 @FunctionalInterface
 public interface BackOffExecution {
@@ -263,8 +257,6 @@ public interface BackOffExecution {
 ```
 
 `nextBackOff` 的值调用 `BackOff` 类的 `nextBackOff()` 函数。如果当前执行次数大于最大执行次数则返回 `STOP`，既超过这个最大执行次数后才会停止重试。
-
-
 
 ```java
 public long nextBackOff() {
@@ -280,8 +272,6 @@ public long nextBackOff() {
 
 那么这个 `getMaxAttempts` 的值又是多少呢？回到最开始，当执行出错会进入 `DefaultErrorHandler` 。`DefaultErrorHandler` 默认的构造函数是：
 
-
-
 ```java
 public DefaultErrorHandler() {
   this(null, SeekUtils.DEFAULT_BACK_OFF);
@@ -289,8 +279,6 @@ public DefaultErrorHandler() {
 ```
 
 `SeekUtils.DEFAULT_BACK_OFF` 定义的是:
-
-
 
 ```java
 public static final int DEFAULT_MAX_FAILURES = 10;
@@ -305,8 +293,6 @@ public static final FixedBackOff DEFAULT_BACK_OFF = new FixedBackOff(0, DEFAULT_
 ## 如何自定义重试次数以及时间间隔?
 
 从上面的代码可以知道，默认错误处理器的重试次数以及时间间隔是由 `FixedBackOff` 控制的，`FixedBackOff` 是 `DefaultErrorHandler` 初始化时默认的。所以自定义重试次数以及时间间隔，只需要在 `DefaultErrorHandler` 初始化的时候传入自定义的 `FixedBackOff` 即可。重新实现一个 `KafkaListenerContainerFactory` ，调用 `setCommonErrorHandler` 设置新的自定义的错误处理器就可以实现。
-
-
 
 ```java
 @Bean
@@ -323,8 +309,6 @@ public KafkaListenerContainerFactory kafkaListenerContainerFactory(ConsumerFacto
 ## 如何在重试失败后进行告警?
 
 自定义重试失败后逻辑，需要手动实现，以下是一个简单的例子，重写 `DefaultErrorHandler` 的 `handleRemaining` 函数，加上自定义的告警等操作。
-
-
 
 ```java
 @Slf4j
@@ -352,8 +336,6 @@ public class DelErrorHandler extends DefaultErrorHandler {
 **死信队列（Dead Letter Queue，简称 DLQ）** 是消息中间件中的一种特殊队列。它主要用于处理无法被消费者正确处理的消息，通常是因为消息格式错误、处理失败、消费超时等情况导致的消息被“丢弃”或“死亡”的情况。当消息进入队列后，消费者会尝试处理它。如果处理失败，或者超过一定的重试次数仍无法被成功处理，消息可以发送到死信队列中，而不是被永久性地丢弃。在死信队列中，可以进一步分析、处理这些无法正常消费的消息，以便定位问题、修复错误，并采取适当的措施。
 
 `@RetryableTopic` 是 Spring Kafka 中的一个注解,它用于配置某个 Topic 支持消息重试，更推荐使用这个注解来完成重试。
-
-
 
 ```java
 // 重试 5 次，重试间隔 100 毫秒,最大间隔 1 秒

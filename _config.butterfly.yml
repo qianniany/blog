@@ -200,6 +200,7 @@ inject:
     - <script src="/blog/js/theme-toggle-transition.js"></script>
     - <script src="/blog/js/toc-sticky.js"></script>
     - <script src="/blog/js/scroll-effects.js"></script>
+    - <script src="/blog/js/pinned-posts.js"></script>
     - <script src="/blog/js/infinite-posts.js"></script>
     - <script src="/blog/js/click-effects.js"></script>
     - <script src="/blog/js/fun-widgets.js"></script>
